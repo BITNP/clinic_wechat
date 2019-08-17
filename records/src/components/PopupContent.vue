@@ -3,7 +3,7 @@
     <popup-header title="编辑当前工单"></popup-header>
     <card>
       <div slot="content">
-        <RecordFrom :record="record" />
+        <RecordFrom v-model="record" :create="create" />
         <br />
       </div>
 
@@ -107,10 +107,14 @@ export default {
       res = res[res.length - 1]
       res = res.slice(1, res.length - 1)
       let pk = parseInt(res)
-      return `${this.Const}${pk}/`
+      return `${this.Const}wechat/${pk}/`
     }
   },
-  props: ['record']
+  props: ['record', 'create'],
+  model: {
+    prop: 'record', // 绑定的值，通过父组件传递
+    event: 'update' // 自定义事件名
+  }
 }
 </script>
 

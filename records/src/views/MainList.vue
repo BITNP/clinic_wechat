@@ -27,7 +27,7 @@
     </infinite-loading>
 
     <br />
-    <Box gap="10px 10px">
+    <Box gap="10px 10px" v-if="tabNum == 0">
       <x-button type="primary" action-type="button" link="/new">新建工单</x-button>
     </Box>
     <br />
@@ -35,7 +35,7 @@
     <br />
     <div v-transfer-dom>
       <popup v-model="display">
-        <Popupcontent :record="record" />
+        <Popupcontent v-model="record" :create="false" />
       </popup>
     </div>
   </div>
@@ -76,7 +76,10 @@ export default {
     scroll: false,
     display: false,
     next: '',
-    record: {},
+    record: {
+      campus: 'LX',
+      appointment_time: new Date().toISOString().substr(0, 10)
+    },
     record_index: -1,
     all_records: [],
     STATUS_MAP: {
@@ -140,6 +143,7 @@ export default {
       return [{ style: 'primary', text: '编辑', onButtonClick: this.popup }]
     },
     popup (name) {
+      console.log(name)
       this.display = !this.display
       this.record = name[0]
       this.record_index = name[1]
@@ -169,12 +173,7 @@ export default {
       return res.padStart(8, '0')
     },
     initRecords () {
-      this.next = this.Const
-      // this.$http.get(this.Const).then(({ data }) => {
-      //   this.next = data.next
-      //   this.all_records = data.results
-      //   console.log(data)
-      // })
+      this.next = this.Const + 'wechat/'
     }
   },
   mounted () {
