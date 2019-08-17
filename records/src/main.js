@@ -15,7 +15,7 @@ import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios, axios)
 
-let BASE_URL = 'http://10.195.191.61:8000/api/wechat/'
+let BASE_URL = 'http://192.168.0.182:8000/api/'
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
@@ -27,7 +27,7 @@ axios.interceptors.request.use(function (config) {
     username: 'FKY'
   }
 
-  if (config.data) {
+  if (config && config.data) {
     config.data.user = 'FKY'
   } else {
     config.data = {

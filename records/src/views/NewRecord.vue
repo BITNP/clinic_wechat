@@ -1,7 +1,7 @@
 <template>
   <div>
     <x-header>新建工单</x-header>
-    <RecordForm :record="record" />
+    <RecordForm v-model="record" :create="true"  />
     <br />
     <box gap="10px 10px">
       <x-button type="primary" @click.native="submit">提交</x-button>
@@ -28,9 +28,10 @@ export default {
     Box
   },
   data: () => ({
+    dates: [],
     record: {
       campus: 'LX',
-      appointment_time: new Date().toISOString().slice(0, 10)
+      appointment_time: ''
     },
     show_toast: false,
     toast_text: ''
@@ -52,7 +53,7 @@ export default {
         return
       }
       this.axios
-        .post(this.Const, {
+        .post(this.Const + 'wechat/', {
           ...this.record
         })
         .then(({ data }) => {
