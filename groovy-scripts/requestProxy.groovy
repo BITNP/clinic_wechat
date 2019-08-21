@@ -1,5 +1,3 @@
-// 新建一个预约申请
-// 返回成功与否
 import wslite.rest.*
 
 // 根据所选内容变化
@@ -8,10 +6,6 @@ String API_HOST = "http://clinic.bitnp.net/api/wechat/2/"
 String badgeNumber = follower?.badgeNumber
 // badgeNumber = '1120143205'
 String appointmentTime = params?.appointment_time
-String campus = params?.campus
-String description = params?.description
-String phone_num = params?.phone_num
-String realname = params?.realname
 
 if (!badgeNumber) {
     return ['errcode': 1]

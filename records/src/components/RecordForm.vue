@@ -9,13 +9,13 @@
         :disable-date-function="validDate"
         placeholder="请选择一个工作中的日期"
       ></calendar>
-      <x-input
+      <x-textarea
         title="问题描述"
-        placeholder="必填项"
+        placeholder="请描述您所遇到的问题"
         required
-        text-align="right"
+        :max="300"
         v-model="record.description"
-      ></x-input>
+      ></x-textarea>
       <selector title="校区" required v-model="record.campus" :options="CAMPUS_LIST" direction="rtl"></selector>
     </group>
     <group title="选填项，这将有助于我们提供更好的服务">
@@ -27,14 +27,15 @@
 </template>
 
 <script>
-import { Group, Calendar, XInput, Selector } from 'vux'
+import { Group, Calendar, XInput, Selector, XTextarea } from 'vux'
 
 export default {
   components: {
     Group,
     Calendar,
     XInput,
-    Selector
+    Selector,
+    XTextarea
   },
   props: ['record', 'create'],
   data: () => ({
