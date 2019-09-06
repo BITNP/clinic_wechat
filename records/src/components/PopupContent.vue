@@ -93,8 +93,15 @@ export default {
         })
     },
     update () {
+      let record = { ...this.$props.record }
+      let _record = {}
+      for (const key in record) {
+        if (record[key]) {
+          _record[key] = record[key]
+        }
+      }
       this.axios
-        .put(this.fixUrl(this.$props.record.url), { ...this.$props.record })
+        .put(this.fixUrl(this.$props.record.url), { ..._record })
         .then(() => {
           this.toast('更新成功')
         })

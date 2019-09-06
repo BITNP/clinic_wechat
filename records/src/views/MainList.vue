@@ -5,6 +5,13 @@
       <tab-item @on-item-click="tabNum = 1">已处理</tab-item>
       <tab-item @on-item-click="tabNum = 2">公告</tab-item>
     </tab>
+    [more]:{{ debug_more }}
+    <br />
+    [announcements]:{{ debug_announcements }}
+    <br />
+    [request]:{{ debug_request }}
+    <br />
+    [request_data]:{{ debug_request_data}}
     <template v-if="tabNum < 2">
       <template v-for="(d,index) in filtered_records">
         <FormPreview
@@ -109,6 +116,10 @@ export default {
     Cell
   },
   data: () => ({
+    debug_more: '',
+    debug_announcements: '',
+    debug_request: '',
+    debug_request_data: '',
     tabNum: 0,
     display_new_form: false,
     scroll: false,
@@ -192,7 +203,6 @@ export default {
       return [{ style: 'primary', text: '编辑', onButtonClick: this.popup }]
     },
     popup (name) {
-      console.log(name)
       this.display = !this.display
       this.record = name[0]
       this.record_index = name[1]
@@ -205,6 +215,7 @@ export default {
       this.$http.get(this.next).then(({ data }) => {
         console.log(data)
 
+        this.debug_more = data
         this.all_records = this.all_records.concat(data.results)
         this.next = data.next
         if (this.next) {
@@ -227,11 +238,22 @@ export default {
     initAnnouncements () {
       console.log('init announce')
       this.$http.get(`${this.Const}announcement/`).then(({ data }) => {
+        this.debug_announcements = data
         data.map(v => {
           v.show = false
         })
         this.announcements = data
         console.log(this.announcements)
+      }).catch((e) => {
+        if (e.request && e.request.data) {
+          this.debug_request = e.request
+          this.debug_request_data = e.request.data
+        } else if (e && e.request) {
+          this.debug_request = e
+          this.debug_request_data = e.request
+        } else {
+          this.debug_request = e
+        }
       })
     }
   },

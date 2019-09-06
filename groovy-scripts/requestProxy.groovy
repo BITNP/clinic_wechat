@@ -1,17 +1,22 @@
 import wslite.rest.*
 // 作为代理
 // 根据所选内容变化
-String API_HOST = "http://clinic.bitnp.net/"
-API_HOST = API_HOST + request.getRequestURI()
-// e.g. http://clinic.bitnp.net/api/wechat/
+
+def API_HOST = request.getHeader('url')
+
+// !MOCK WILL BE DELETED
+API_HOST = API_HOST? API_HOST: "https://clinic.bitnp.net/api/wechat/"
+// println "[index][" + request.getMethod() + "] visit:" + API_HOST 
+// e.g. https://clinic.bitnp.net/api/wechat/
 
 // set apikey
 def HEADERS = [apikey: "oh-my-tlb"]
 
+
 // get badgeNumber
 String badgeNumber = follower?.badgeNumber
 if (!badgeNumber) {
-    return ['errcode': 1]
+    return ['errcode': 'badgeNumber initailize error. ' + follower.toString() + '; request-header[url]:' + API_HOST]
 }
 
 // set query for backend authentication
@@ -19,48 +24,75 @@ def QUERY = [username: badgeNumber]
 
 // badgeNumber = '1120143205'
 
+def requestMethod = request.getMethod();
+if (!requestMethod){
+    return ['errcode':'mothod empty.' + e];
+}
 
-def client = new RESTClient(API_HOST)
-// client.httpClient.sslTrustAllCerts = true
+def client = new RESTClient(API_HOST);
+client.httpClient.sslTrustAllCerts = true
+
 
 try {
+    def data = [:]
+        if (requestMethod == "POST"){
 
-    def method = request.getMethod()
+            def json_params = request.JSON
+                json_params.put("user", badgeNumber)
 
-    if (request.method == "post"){
-        def data = client.post(
-            headers: HEADERS,
-            query: QUERY,
-            requestContentType: 'application/json',
-            body: request.JSON
-        ).json
-    } else if (request.method == "get"){
-        def data = client.get(
-            headers: HEADERS,
-            query: QUERY,
-            requestContentType: 'application/json',
-            body: request.JSON
-    } else if (request.method == "delete"){
-        def data = client.delete(
-            headers: HEADERS,
-            query: QUERY,
-            requestContentType: 'application/json',
-            body: request.JSON
-    } else if (request.method == "put"){
-        def data = client.put(
-            headers: HEADERS,
-            query: QUERY,
-            requestContentType: 'application/json',
-            body: request.JSON
-    } else if (request.method == "option"){
-        def data = client.option(
-            headers: HEADERS,
-            query: QUERY,
-            requestContentType: 'application/json',
-            body: request.JSON
-    }
+                data = client.post(
+                        headers: HEADERS,
+                        query: QUERY,
+                        accept: ContentType.JSON,
+
+                        ){
+                    type ContentType.JSON
+                        json request.JSON
+                }
+        } else if (requestMethod == "GET"){
+            data = client.get(
+                    headers: HEADERS,
+                    query: QUERY,
+                    accept: ContentType.JSON,
+                    )
+        } else if (requestMethod == "DELETE"){
+            data = client.delete(
+                    headers: HEADERS,
+                    query: QUERY,
+                    accept: ContentType.JSON,
+                    )
+        } else if (requestMethod == "PUT"){
+
+            def json_params = request.JSON
+                // json_params.put("user", badgeNumber)
+                println json_params
+
+                data = client.put(
+                        headers: HEADERS,
+                        query: QUERY,
+                        accept: ContentType.JSON,
+                        ){
+                    type ContentType.JSON
+                        json request.JSON
+                }
+        } else if (requestMethod == "OPTION"){
+            data = client.option(
+                    headers: HEADERS,
+                    query: QUERY,
+                    accept: ContentType.JSON,
+                    body: params
+                    )
+        } else {
+            return requestMethod
+        }
 
     return data
 } catch (e) {
+    // println "\n\n\n"
+    // println e.message
+    println e.getResponse().getContentAsString()
+        // println "\n\n\n"
 
+        return ['errcode': 'query resend error\n' + e ]
 }
+
