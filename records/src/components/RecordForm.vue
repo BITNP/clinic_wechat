@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ record }}
     <group title="必填项">
       <calendar
         :readonly="!create"

@@ -35,7 +35,7 @@ export default {
     },
     getTOC () {
       this.axios.get(`${this.Const}announcement/toc/`).then(({ data }) => {
-        this.toc = data
+        this.toc = data.content
       })
     }
   },

@@ -14,26 +14,55 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 Vue.use(VueAxios, axios)
-
-let BASE_URL = 'http://192.168.0.182:8000/api/'
+console.log(process.env)
+let BASE_URL = process.env.BASE_URL
+let PROXY_URL = process.env.PROXY_URL
+let USE_PROXY = process.env.USE_PROXY
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
-  // Do something before request is sent
-  config.headers = {
-    apikey: 'oh-my-tlb'
-  }
-  config.params = {
-    username: 'FKY'
-  }
+  if (USE_PROXY) {
+    // save real url in headers[url]
+    if (config.headers) {
+      config.headers['url'] = config.url
+    } else {
+      config.headers = {
+        url: config.url
+      }
+    }
+    // substitude url with groovy proxy url
+    config.url = PROXY_URL
+    config.params = {
+      script: 'requestProxy.groovy'
+    }
 
-  if (config && config.data) {
-    config.data.user = 'FKY'
+    // set script name
+    if (config && config.data) {
+      config.data.script = 'requestProxy.groovy'
+    } else {
+      config.data = {
+        script: 'requestProxy.groovy'
+      }
+    }
   } else {
-    config.data = {
-      user: 'FKY'
+    // 本机开发，不使用groovy proxy
+    // inject api and user name
+    config.headers = {
+      apikey: 'oh-my-tlb'
+    }
+    config.params = {
+      username: 'FKY'
+    }
+
+    if (config && config.data) {
+      config.data.user = 'FKY'
+    } else {
+      config.data = {
+        user: 'FKY'
+      }
     }
   }
+
   return config
 }, function (error) {
   // Do something with request error
@@ -46,7 +75,13 @@ axios.interceptors.response.use(function (response) {
   return response
 }, function (error) {
   // Do something with response error
-  console.log(error.response.data)
+  if (error.response && error.response.data) {
+    console.log(error.response.data)
+  } else if (error.response) {
+    console.log(error.response)
+  } else {
+    console.log(error)
+  }
   return Promise.reject(error)
 })
 
