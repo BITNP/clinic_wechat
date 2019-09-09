@@ -1,7 +1,10 @@
 import wslite.rest.*
+
+
+
+
 // 作为代理
 // 根据所选内容变化
-
 def API_HOST = request.getHeader('url')
 
 // !MOCK WILL BE DELETED
@@ -24,69 +27,70 @@ def QUERY = [username: badgeNumber]
 
 // badgeNumber = '1120143205'
 
-def requestMethod = request.getMethod();
-if (!requestMethod){
-    return ['errcode':'mothod empty.' + e];
+def requestMethod = request.getMethod()
+    if (!requestMethod){
+        return ['errcode':'mothod empty.' + e]
+    }
+
+
+def client = new RESTClient(API_HOST){
+    client.httpClient.sslTrustAllCerts = true
 }
 
-def client = new RESTClient(API_HOST);
-client.httpClient.sslTrustAllCerts = true
-
-
 try {
-    def data = [:]
-        if (requestMethod == "POST"){
+    def data = [:];
+    if (requestMethod == "POST"){
 
-            def json_params = request.JSON
-                json_params.put("user", badgeNumber)
+        def json_params = request.JSON;
+        json_params.put("user", badgeNumber);
 
-                data = client.post(
-                        headers: HEADERS,
-                        query: QUERY,
-                        accept: ContentType.JSON,
+        data = client.post(
+                headers: HEADERS,
+                query: QUERY,
+                accept: ContentType.JSON,
 
-                        ){
-                    type ContentType.JSON
-                        json request.JSON
-                }
-        } else if (requestMethod == "GET"){
-            data = client.get(
-                    headers: HEADERS,
-                    query: QUERY,
-                    accept: ContentType.JSON,
-                    )
-        } else if (requestMethod == "DELETE"){
-            data = client.delete(
-                    headers: HEADERS,
-                    query: QUERY,
-                    accept: ContentType.JSON,
-                    )
-        } else if (requestMethod == "PUT"){
-
-            def json_params = request.JSON
-                // json_params.put("user", badgeNumber)
-                println json_params
-
-                data = client.put(
-                        headers: HEADERS,
-                        query: QUERY,
-                        accept: ContentType.JSON,
-                        ){
-                    type ContentType.JSON
-                        json request.JSON
-                }
-        } else if (requestMethod == "OPTION"){
-            data = client.option(
-                    headers: HEADERS,
-                    query: QUERY,
-                    accept: ContentType.JSON,
-                    body: params
-                    )
-        } else {
-            return requestMethod
+                ){
+            type ContentType.JSON
+                json request.JSON
         }
+    } else if (requestMethod == "GET"){
+        data = client.get(
+                headers: HEADERS,
+                query: QUERY,
+                accept: ContentType.JSON,
+                )
+    } else if (requestMethod == "DELETE"){
+        data = client.delete(
+                headers: HEADERS,
+                query: QUERY,
+                accept: ContentType.JSON,
+                )
+    } else if (requestMethod == "PUT"){
 
-    return data
+        def json_params = request.JSON
+            // json_params.put("user", badgeNumber)
+            println json_params
+
+            data = client.put(
+                    headers: HEADERS,
+                    query: QUERY,
+                    accept: ContentType.JSON,
+                    ){
+                type ContentType.JSON
+                    json request.JSON
+            }
+    } else if (requestMethod == "OPTION"){
+        data = client.option(
+                headers: HEADERS,
+                query: QUERY,
+                accept: ContentType.JSON,
+                body: params
+                )
+    } else {
+        return requestMethod
+    }
+
+    return data.contentAsString
 } catch (e) {
     // println "\n\n\n"
     // println e.message
@@ -95,4 +99,3 @@ try {
 
         return ['errcode': 'query resend error\n' + e ]
 }
-
