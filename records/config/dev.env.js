@@ -4,7 +4,7 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  BASE_URL: '"http://localhost:8000/api/"',
+  BASE_URL: '"https://clinic.bitnp.net/api/"',
   PROXY_URL: '"http://localhost:8080/script_playground/api/"',
   PORT: '8888'
 })
