@@ -16,7 +16,7 @@
       <template v-for="(d,index) in filtered_records">
         <FormPreview
           header-label="工单状态"
-          :key="index"
+          :key="index+'fp'"
           :header-value="STATUS_MAP[d.status]"
           :body-items="dict2list(d)"
           :footer-buttons="WORKING_STATUS.includes(d.status)?dict2button(d):[]"
@@ -49,7 +49,7 @@
     </template>
     <template v-else>
       <template v-for="(ann,idx) in announcements">
-        <Card :key="idx">
+        <Card :key="idx+'c'">
           <div slot="header">
             <group>
               <Cell title="标题" :value="ann.title"></Cell>
@@ -58,14 +58,15 @@
           </div>
           <template slot="content">
             <group>
-              <Cell title="内容" @click.native="ann.show = !ann.show">
-                <x-icon type="ios-arrow-down" size="30" v-if="ann.show"></x-icon>
-                <x-icon type="ios-arrow-up" size="30" v-if="!ann.show"></x-icon>
+              <!-- 可以修改为可折叠的？ -->
+              <Cell title="内容">
+                <!-- {{ann.show}}
+                <x-icon type="ios-arrow-down" size="30" v-if="ann.show"></x-icon>-->
+                <!-- <x-icon type="ios-arrow-up" size="30"></x-icon> -->
               </Cell>
             </group>
-            <p slot="content" class="card-padding" v-if="ann.show">
+            <p slot="content" class="card-padding">
               <vue-markdown :show="ann.content.length>0" :source="ann.content"></vue-markdown>
-              {{ann.content}}
             </p>
           </template>
 
@@ -76,7 +77,7 @@
             </group>
           </div>
         </Card>
-        <br :key="idx" />
+        <br :key="idx+'b'" />
       </template>
     </template>
   </div>
@@ -93,7 +94,8 @@ import {
   XButton,
   Divider,
   Box,
-  Cell
+  Cell,
+  Group
 } from 'vux'
 import InfiniteLoading from 'vue-infinite-loading'
 import Popupcontent from '@/components/PopupContent'
@@ -113,7 +115,8 @@ export default {
     InfiniteLoading,
     Box,
     VueMarkdown,
-    Cell
+    Cell,
+    Group
   },
   data: () => ({
     debug_more: '',
@@ -237,24 +240,27 @@ export default {
     },
     initAnnouncements () {
       console.log('init announce')
-      this.$http.get(`${this.Const}announcement/`).then(({ data }) => {
-        this.debug_announcements = data
-        data.map(v => {
-          v.show = false
+      this.$http
+        .get(`${this.Const}announcement/`)
+        .then(({ data }) => {
+          this.debug_announcements = data
+          data.map(v => {
+            v.show = false
+          })
+          this.announcements = data
+          console.log(this.announcements)
         })
-        this.announcements = data
-        console.log(this.announcements)
-      }).catch((e) => {
-        if (e.request && e.request.data) {
-          this.debug_request = e.request
-          this.debug_request_data = e.request.data
-        } else if (e && e.request) {
-          this.debug_request = e
-          this.debug_request_data = e.request
-        } else {
-          this.debug_request = e
-        }
-      })
+        .catch(e => {
+          if (e.request && e.request.data) {
+            this.debug_request = e.request
+            this.debug_request_data = e.request.data
+          } else if (e && e.request) {
+            this.debug_request = e
+            this.debug_request_data = e.request
+          } else {
+            this.debug_request = e
+          }
+        })
     }
   },
   mounted () {
