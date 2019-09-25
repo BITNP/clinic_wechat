@@ -5,13 +5,13 @@
       <tab-item @on-item-click="tabNum = 1">已处理</tab-item>
       <tab-item @on-item-click="tabNum = 2">公告</tab-item>
     </tab>
-    [more]:{{ debug_more }}
-    <br />
-    [announcements]:{{ debug_announcements }}
-    <br />
-    [request]:{{ debug_request }}
-    <br />
-    [request_data]:{{ debug_request_data}}
+    <!-- [more]:{{ debug_more }} -->
+    <!-- <br /> -->
+    <!-- [announcements]:{{ debug_announcements }} -->
+    <!-- <br /> -->
+    <!-- [request]:{{ debug_request }} -->
+    <!-- <br /> -->
+    <!-- [request_data]:{{ debug_request_data}} -->
     <template v-if="tabNum < 2">
       <template v-for="(d,index) in filtered_records">
         <FormPreview
@@ -27,10 +27,10 @@
 
       <infinite-loading @infinite="loadMore" spinner="circles">
         <template slot="no-results">
-          <divider>没有更多数据咧</divider>
+          <divider>没有更多数据咧 - @网络开拓者协会-电脑诊所</divider>
         </template>
         <template slot="no-more">
-          <divider>已经到底啦 :)</divider>
+          <divider>已经到底啦 :) - @网络开拓者协会-电脑诊所</divider>
         </template>
       </infinite-loading>
 
@@ -156,10 +156,11 @@ export default {
       model: '电脑型号',
       phone_num: '手机号',
       realname: '真实姓名',
-      reject_reason: '拒绝原因',
+      reject_reason: '工单申请驳回原因',
       status: '工单状态',
       url: 'URL',
-      worker_description: '工作人员对问题描述'
+      worker_description: '工作人员对问题描述',
+      password: '电脑开机密码'
     },
     CAMPUS_MAP: {
       LX: '良乡',
@@ -189,15 +190,19 @@ export default {
         'appointment_time',
         'description',
         'model',
+        'password',
         'phone_num',
         'realname',
-        'workder_description'
+        'workder_description',
+        'reject_reason'
       ]
       let ret = []
       ret.push({ label: '工单号', value: this.getId(data.url) })
       ret.push({ label: '校区', value: this.CAMPUS_MAP[data.campus] })
       for (let key of keys) {
-        ret.push({ label: this.KEY_TRANSLATION[key], value: data[key] })
+        if (data[key]) {
+          ret.push({ label: this.KEY_TRANSLATION[key], value: data[key] })
+        }
       }
 
       return ret
