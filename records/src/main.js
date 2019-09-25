@@ -12,6 +12,10 @@ import {
 } from 'vux'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import 'vue-event-calendar/dist/style.css'
+import vueEventCalendar from 'vue-event-calendar'
+
+Vue.use(vueEventCalendar, {'locale': 'zh'})
 
 Vue.use(VueAxios, axios)
 console.log(process.env)

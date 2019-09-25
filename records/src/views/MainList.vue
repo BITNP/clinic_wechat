@@ -1,10 +1,16 @@
 <template>
-  <div>
-    <tab>
-      <tab-item @on-item-click="tabNum = 0" selected>正在处理</tab-item>
-      <tab-item @on-item-click="tabNum = 1">已处理</tab-item>
-      <tab-item @on-item-click="tabNum = 2">公告</tab-item>
-    </tab>
+  <div @touchstart='touchStart' @touchend='touchEnd'>
+    <div>
+      <tab >
+        <tab-item v-for="(tabTitle, index) in tabTitles" :key="index" @on-item-click="tabNum = index" :selected="index == tabNum">
+          {{tabTitle}}
+        </tab-item>
+        <!-- <tab-item @on-item-click="tabNum = 0" selected>正在处理</tab-item>
+        <tab-item @on-item-click="tabNum = 1">已处理</tab-item>
+        <tab-item @on-item-click="tabNum = 2">公告</tab-item>
+        <tab-item @on-item-click="tabNum = 3">诊所预约状态</tab-item> -->
+      </tab>
+    </div>
     <!-- [more]:{{ debug_more }} -->
     <!-- <br /> -->
     <!-- [announcements]:{{ debug_announcements }} -->
@@ -12,7 +18,7 @@
     <!-- [request]:{{ debug_request }} -->
     <!-- <br /> -->
     <!-- [request_data]:{{ debug_request_data}} -->
-    <template v-if="tabNum < 2">
+    <template v-if="[1,2].includes(tabNum)">
       <template v-for="(d,index) in filtered_records">
         <FormPreview
           header-label="工单状态"
@@ -35,7 +41,7 @@
       </infinite-loading>
 
       <br />
-      <Box gap="10px 10px" v-if="tabNum == 0">
+      <Box gap="10px 10px" v-if="tabNum == 1">
         <x-button type="primary" action-type="button" link="/new">新建工单</x-button>
       </Box>
       <br />
@@ -47,7 +53,7 @@
         </popup>
       </div>
     </template>
-    <template v-else>
+    <template v-else-if="tabNum == 3">
       <template v-for="(ann,idx) in announcements">
         <Card :key="idx+'c'">
           <div slot="header">
@@ -80,6 +86,9 @@
         <br :key="idx+'b'" />
       </template>
     </template>
+    <template v-else>
+      <Calendar :dates="dates" />
+    </template>
   </div>
 </template>
 
@@ -100,6 +109,7 @@ import {
 import InfiniteLoading from 'vue-infinite-loading'
 import Popupcontent from '@/components/PopupContent'
 import VueMarkdown from 'vue-markdown'
+import Calendar from '@/components/Calendar'
 
 export default {
   components: {
@@ -116,9 +126,11 @@ export default {
     Box,
     VueMarkdown,
     Cell,
-    Group
+    Group,
+    Calendar
   },
   data: () => ({
+    tabTitles: [ '诊所服务日历', '正在处理', '已处理', '公告'],
     debug_more: '',
     debug_announcements: '',
     debug_request: '',
@@ -127,7 +139,12 @@ export default {
     display_new_form: false,
     scroll: false,
     display: false,
+    dates: [],
     next: '',
+    touch: {
+      x: -1
+
+    },
     record: {
       campus: 'LX',
       appointment_time: new Date().toISOString().substr(0, 10)
@@ -185,6 +202,18 @@ export default {
     }
   },
   methods: {
+    touchStart (e) {
+      this.touch.x = e.touches[0].clientX
+    },
+    touchEnd (e) {
+      let endX = e.changedTouches[0].clientX
+      if (endX - this.touch.x > 100) {
+        this.tabNum -= 1
+      } else if (endX - this.touch.x < -100) {
+        this.tabNum += 1
+      }
+      this.tabNum = (this.tabNum + this.tabTitles.length) % this.tabTitles.length
+    },
     dict2list (data) {
       let keys = [
         'appointment_time',
@@ -266,11 +295,17 @@ export default {
             this.debug_request = e
           }
         })
+    },
+    initDates () {
+      this.axios.get(this.Const + 'date/').then(({ data }) => {
+        this.dates = data
+      })
     }
   },
   mounted () {
     this.initRecords()
     this.initAnnouncements()
+    this.initDates()
   }
 }
 </script>
