@@ -1,20 +1,36 @@
 <template>
   <div id="app">
     <router-view></router-view>
+    <toast
+      v-model="toast.show"
+      type="text"
+      :time="800"
+      is-show-mask
+      :text="toast.text"
+      :position="toast.position"
+    ></toast>
   </div>
 </template>
 
 <script>
+import { Toast } from 'vux'
+
 export default {
   name: 'app',
-  created () {
-
-  }
+  components: {
+    Toast
+  },
+  computed: {
+    toast () {
+      return this.$store.state.toast
+    }
+  },
+  created () {}
 }
 </script>
 
 <style lang="less">
-@import '~vux/src/styles/reset.less';
+@import "~vux/src/styles/reset.less";
 
 body {
   background-color: #fbf9fe;

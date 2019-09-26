@@ -80,7 +80,9 @@ export default {
     onDelete (event) {
       this.axios
         .delete(this.fixUrl(this.$props.record.url))
-        .then(() => {
+        .then(({data, statusCode}) => {
+          console.log(data)
+          console.log(statusCode)
           this.$router.push({
             name: 'success',
             params: {

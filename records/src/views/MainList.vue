@@ -1,14 +1,13 @@
 <template>
-  <div @touchstart='touchStart' @touchend='touchEnd'>
+  <div @touchstart="touchStart" @touchend="touchEnd">
     <div>
-      <tab >
-        <tab-item v-for="(tabTitle, index) in tabTitles" :key="index" @on-item-click="tabNum = index" :selected="index == tabNum">
-          {{tabTitle}}
-        </tab-item>
-        <!-- <tab-item @on-item-click="tabNum = 0" selected>正在处理</tab-item>
-        <tab-item @on-item-click="tabNum = 1">已处理</tab-item>
-        <tab-item @on-item-click="tabNum = 2">公告</tab-item>
-        <tab-item @on-item-click="tabNum = 3">诊所预约状态</tab-item> -->
+      <tab>
+        <tab-item
+          v-for="(tabTitle, index) in tabTitles"
+          :key="index"
+          @on-item-click="tabNum = index"
+          :selected="index == tabNum"
+        >{{tabTitle}}</tab-item>
       </tab>
     </div>
     <!-- [more]:{{ debug_more }} -->
@@ -130,7 +129,7 @@ export default {
     Calendar
   },
   data: () => ({
-    tabTitles: [ '诊所服务日历', '正在处理', '已处理', '公告'],
+    tabTitles: ['诊所服务日历', '正在处理', '已处理', '公告'],
     debug_more: '',
     debug_announcements: '',
     debug_request: '',
@@ -143,7 +142,6 @@ export default {
     next: '',
     touch: {
       x: -1
-
     },
     record: {
       campus: 'LX',
@@ -190,7 +188,7 @@ export default {
   }),
   computed: {
     filtered_records () {
-      if (this.tabNum === 0) {
+      if (this.tabNum === 1) {
         return this.all_records.filter(r =>
           this.WORKING_STATUS.includes(r.status)
         )
@@ -212,7 +210,8 @@ export default {
       } else if (endX - this.touch.x < -100) {
         this.tabNum += 1
       }
-      this.tabNum = (this.tabNum + this.tabTitles.length) % this.tabTitles.length
+      this.tabNum =
+        (this.tabNum + this.tabTitles.length) % this.tabTitles.length
     },
     dict2list (data) {
       let keys = [

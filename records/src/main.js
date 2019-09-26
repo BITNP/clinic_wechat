@@ -14,6 +14,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import 'vue-event-calendar/dist/style.css'
 import vueEventCalendar from 'vue-event-calendar'
+import store from './store'
 
 Vue.use(vueEventCalendar, {'locale': 'zh'})
 
@@ -126,5 +127,6 @@ Vue.prototype.Const = BASE_URL
 /* eslint-disable no-new */
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app-box')

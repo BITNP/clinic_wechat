@@ -105,7 +105,7 @@ try {
                 ){
                 type ContentType.JSON
                 json request.JSON
-        }
+                }
     } else if (requestMethod == "OPTION"){
         data = client.option(
                 headers: HEADERS,
