@@ -1,6 +1,6 @@
 <template>
  <vue-event-calendar :events="events" :title="'容量详情'" >
-        <template scope="props">
+        <template slot-scope="props">
           <div v-for="(event, index) in props.showEvents" class="event-item" :key="index">
             <!-- In here do whatever you want, make you owner event template -->
             {{event}}
