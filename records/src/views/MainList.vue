@@ -32,10 +32,14 @@
 
       <infinite-loading @infinite="loadMore" spinner="circles">
         <template slot="no-results">
-          <divider>没有更多数据咧 - @网络开拓者协会-电脑诊所</divider>
+          <divider>
+            网络开拓者协会-电脑诊所
+          </divider>
         </template>
         <template slot="no-more">
-          <divider>已经到底啦 :) - @网络开拓者协会-电脑诊所</divider>
+          <divider>
+            网络开拓者协会-电脑诊所
+          </divider>
         </template>
       </infinite-loading>
 
@@ -144,7 +148,7 @@ export default {
       x: -1
     },
     record: {
-      campus: 'LX',
+      campus: '',
       appointment_time: new Date().toISOString().substr(0, 10)
     },
     record_index: -1,
@@ -204,10 +208,11 @@ export default {
       this.touch.x = e.touches[0].clientX
     },
     touchEnd (e) {
+      const threshold = 150
       let endX = e.changedTouches[0].clientX
-      if (endX - this.touch.x > 100) {
+      if (endX - this.touch.x > threshold) {
         this.tabNum -= 1
-      } else if (endX - this.touch.x < -100) {
+      } else if (endX - this.touch.x < -threshold) {
         this.tabNum += 1
       }
       this.tabNum =
@@ -294,17 +299,15 @@ export default {
             this.debug_request = e
           }
         })
-    },
-    initDates () {
-      this.axios.get(this.Const + 'date/').then(({ data }) => {
-        this.dates = data
-      })
     }
   },
-  mounted () {
+  created () {
+    // 放到Store里，还可以进行性能优化
     this.initRecords()
     this.initAnnouncements()
-    this.initDates()
+  },
+  mounted () {
+    this.record.campus = '良乡校区'
   }
 }
 </script>

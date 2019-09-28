@@ -42,8 +42,7 @@ export default {
     toc: false,
     dates: [],
     record: {
-      campus: 'LX',
-      appointment_time: ''
+      campus: ''
     },
     show_toast: false,
     toast_text: ''
@@ -73,13 +72,15 @@ export default {
           ...this.record
         })
         .then(({ data }) => {
-          console.log(data)
           this.$router.push('/success')
         })
         .catch(() => {
           this.toast('Oops! 我们遇到了一些技术问题')
         })
     }
+  },
+  mounted () {
+    this.record.campus = this.$store.state.campus[0].name
   }
 }
 </script>
