@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -18,7 +19,9 @@ export default new Vuex.Store({
       show: false,
       text: '',
       position: ''
-    }
+    },
+    campus: [],
+    dates: []
   },
   mutations: {
     popSuccess (state, text = '操作成功') {
@@ -26,9 +29,22 @@ export default new Vuex.Store({
     },
     popError (state, text = '操作失败') {
       state.toast = newToast(text)
+    },
+    getCampus (state) {
+      Axios.get(`${Vue.prototype.Const}campus/`)
+        .then(({ data }) => {
+          console.log(Vue.prototype.Const)
+          console.log(data)
+          state.campus = data
+        })
+        .catch(e => (state.toast = newToast('操作失败')))
+    },
+    getDates (state) {
+      Axios.get(Vue.prototype.Const + 'date/').then(({ data }) => {
+        console.log(data)
+        state.dates = data
+      })
     }
   },
-  actions: {
-
-  }
+  actions: {}
 })

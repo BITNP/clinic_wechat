@@ -25,7 +25,10 @@ export default {
       return this.$store.state.toast
     }
   },
-  created () {}
+  created () {
+    this.$store.commit('getCampus')
+    this.$store.commit('getDates')
+  }
 }
 </script>
 
