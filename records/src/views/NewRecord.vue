@@ -13,7 +13,7 @@
       <x-button type="primary" @click.native="submit">提交</x-button>
     </box>
     <toast v-model="show_toast" type="text" :time="800" :text="toast_text"></toast>
-    <TOC v-model="toc"/>
+    <TOC v-model="toc" />
   </div>
 </template>
 
@@ -72,6 +72,10 @@ export default {
           ...this.record
         })
         .then(({ data }) => {
+          if (data.includes('wslite.http.HTTPResponse')) {
+            this.toast('提交失败！您已有工单或网络出现故障。')
+            return
+          }
           this.$router.push('/success')
         })
         .catch(() => {
