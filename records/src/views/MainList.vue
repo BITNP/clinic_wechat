@@ -32,19 +32,18 @@
 
       <infinite-loading @infinite="loadMore" spinner="circles">
         <template slot="no-results">
-          <divider>
-            网络开拓者协会-电脑诊所
-          </divider>
+          <divider>网络开拓者协会 - 电脑诊所</divider>
         </template>
         <template slot="no-more">
-          <divider>
-            网络开拓者协会-电脑诊所
-          </divider>
+          <divider>网络开拓者协会 - 电脑诊所</divider>
         </template>
       </infinite-loading>
 
       <br />
-      <Box gap="10px 10px" v-if="tabNum == 1 && filtered_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0">
+      <Box
+        gap="10px 10px"
+        v-if="tabNum == 1 && filtered_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0"
+      >
         <x-button type="primary" action-type="button" link="/new">新建工单</x-button>
       </Box>
       <br />
@@ -88,6 +87,7 @@
         </Card>
         <br :key="idx+'b'" />
       </template>
+      <divider>网络开拓者协会 - 电脑诊所</divider>
     </template>
     <template v-else>
       <Calendar :dates="dates" />

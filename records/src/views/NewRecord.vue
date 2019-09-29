@@ -83,8 +83,19 @@ export default {
         })
     }
   },
+  computed: {
+    campus () {
+      return this.$store.state.campus
+    }
+  },
+  watch: {
+    campus: function (val) {
+      if (this.campus && this.campus.length > 0) {
+        this.record.campus = this.$store.state.campus[0].name
+      }
+    }
+  },
   mounted () {
-    this.record.campus = this.$store.state.campus[0].name
   }
 }
 </script>
