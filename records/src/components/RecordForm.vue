@@ -24,7 +24,7 @@
       <x-input title="真实姓名" text-align="right" v-model="record.realname"></x-input>
       <x-input
         title="电脑开机密码"
-        placeholder="如果您在维修电脑的过程中会离开诊所，请填写以帮助我们唤醒休眠的电脑"
+        placeholder="帮助我们唤醒休眠的电脑"
         text-align="right"
         v-model="record.password"
       ></x-input>
