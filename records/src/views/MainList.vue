@@ -44,7 +44,7 @@
       </infinite-loading>
 
       <br />
-      <Box gap="10px 10px" v-if="tabNum == 1">
+      <Box gap="10px 10px" v-if="tabNum == 1 && filtered_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0">
         <x-button type="primary" action-type="button" link="/new">新建工单</x-button>
       </Box>
       <br />
