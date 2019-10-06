@@ -56,7 +56,10 @@
       </div>
     </template>
     <template v-else-if="tabNum == 3">
-      <template v-for="(ann,idx) in announcements">
+      <group>
+        <popup-radio title="排序方式" :options="ANNOUNCEMENTS_ORDER_OPTIONS" v-model="announcements_order"></popup-radio>
+      </group>
+      <template v-for="(ann,idx) in ordered_announcements">
         <Card :key="idx+'c'">
           <div slot="header">
             <group>
@@ -107,12 +110,25 @@ import {
   Divider,
   Box,
   Cell,
-  Group
+  Group,
+  PopupRadio
 } from 'vux'
 import InfiniteLoading from 'vue-infinite-loading'
 import Popupcontent from '@/components/PopupContent'
 import VueMarkdown from 'vue-markdown'
 import Calendar from '@/components/Calendar'
+
+let cmpHelper = function (attrName, less = false) {
+  if (less) {
+    return (a, b) => {
+      if (a[attrName] > b[attrName]) { return 1 } else if (a[attrName] < b[attrName]) { return -1 } else return 0
+    }
+  } else {
+    return (a, b) => {
+      if (a[attrName] > b[attrName]) { return -1 } else if (a[attrName] < b[attrName]) { return 1 } else return 0
+    }
+  }
+}
 
 export default {
   components: {
@@ -130,7 +146,8 @@ export default {
     VueMarkdown,
     Cell,
     Group,
-    Calendar
+    Calendar,
+    PopupRadio
   },
   data: () => ({
     tabTitles: ['诊所服务日历', '正在处理', '已处理', '公告'],
@@ -140,6 +157,7 @@ export default {
     debug_request_data: '',
     tabNum: 0,
     display_new_form: false,
+    announcements_order: '最新创建',
     scroll: false,
     display: false,
     dates: [],
@@ -188,7 +206,10 @@ export default {
     ANNOUNCEMENTS_MAP: {
       TOC: '免责声明',
       CM: '普通公告'
-    }
+    },
+    ANNOUNCEMENTS_ORDER_OPTIONS: [
+      '最新创建', '最早创建', '最新修改', '最早修改', '最晚过期', '最早过期'
+    ]
   }),
   computed: {
     filtered_records () {
@@ -201,6 +222,24 @@ export default {
           r => !this.WORKING_STATUS.includes(r.status)
         )
       }
+    },
+    ordered_announcements () {
+      let sortby
+      if (this.announcements_order === '最新创建') {
+        sortby = cmpHelper('createdTime')
+      } else if (this.announcements_order === '最早创建') {
+        sortby = cmpHelper('createdTime', true)
+      } else if (this.announcements_order === '最新修改') {
+        sortby = cmpHelper('lastEditedTime')
+      } else if (this.announcements_order === '最早修改') {
+        sortby = cmpHelper('lastEditedTime', true)
+      } else if (this.announcements_order === '最晚过期') {
+        sortby = cmpHelper('expireTime')
+      } else {
+        // 最早过期
+        sortby = cmpHelper('expireTime', true)
+      }
+      return this.announcements.sort(sortby)
     }
   },
   methods: {
