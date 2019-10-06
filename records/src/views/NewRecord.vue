@@ -72,14 +72,18 @@ export default {
           ...this.record
         })
         .then(({ data }) => {
-          if (data.includes('wslite.http.HTTPResponse')) {
+          console.log(typeof data)
+          if (typeof (data) !== 'object' && data.includes('wslite.http.HTTPResponse')) {
             this.toast('提交失败！您已有工单或网络出现故障。')
             return
           }
           this.$router.push('/success')
         })
-        .catch(() => {
-          this.toast('Oops! 我们遇到了一些技术问题')
+        .catch(({response}) => {
+          console.log(response)
+          if (response && response.status === 400 && response.data && response.data[0].includes('已超出')) {
+            this.toast('提交失败！已超出可提交工单数量')
+          } else { this.toast('Oops! 我们遇到了一些技术问题') }
         })
     }
   },
