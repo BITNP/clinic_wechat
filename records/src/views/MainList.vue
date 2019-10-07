@@ -18,6 +18,7 @@
     <!-- <br /> -->
     <!-- [request_data]:{{ debug_request_data}} -->
     <template v-if="[1,2].includes(tabNum)">
+      <!-- {{filtered_records}} -->
       <template v-for="(d,index) in filtered_records">
         <FormPreview
           header-label="工单状态"
@@ -263,6 +264,7 @@ export default {
         'description',
         'model',
         'password',
+        'campus',
         'phone_num',
         'realname',
         'workder_description',
@@ -270,7 +272,6 @@ export default {
       ]
       let ret = []
       ret.push({ label: '工单号', value: this.getId(data.url) })
-      ret.push({ label: '校区', value: this.CAMPUS_MAP[data.campus] })
       for (let key of keys) {
         if (data[key]) {
           ret.push({ label: this.KEY_TRANSLATION[key], value: data[key] })
