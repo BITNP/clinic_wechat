@@ -44,14 +44,12 @@ export default {
     XTextarea
   },
   props: ['record', 'create'],
-  data: () => ({
-  }),
+  data: () => ({}),
   model: {
     prop: 'record', // 绑定的值，通过父组件传递
     event: 'update' // 自定义事件名
   },
   methods: {
-
     validDate (date) {
       // return false if valid
       return !this.dates.includes(date.formatedDate)
@@ -63,11 +61,10 @@ export default {
       return campus.map(v => ({ key: v.name, value: v.name }))
     },
     dates () {
-      return this.$store.state.dates.map(date => date.date)
+      return this.$store.state.dates
+        .filter(v => v.campus === this.record.campus)
+        .map(date => date.date)
     }
-  },
-
-  mounted () {
   }
 }
 </script>
