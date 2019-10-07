@@ -20,6 +20,20 @@
     <template v-if="[1,2].includes(tabNum)">
       <!-- {{filtered_records}} -->
       <template v-for="(d,index) in filtered_records">
+        <RecordPreview :key="index" :record="d" @edit-current-record="popup([d,index])"></RecordPreview>
+        <!-- <Flow :key="index + 'c'">
+          <flow-state state="1" title="创建工单" is-done></flow-state>
+          <flow-line is-done></flow-line>
+
+          <flow-state state="2" title="审核通过" is-done>
+          </flow-state>
+          <flow-line tip="正在完成"></flow-line>
+
+          <flow-state state="3" title="已到诊所" is-done></flow-state>
+          <flow-line></flow-line>
+
+          <flow-state state="4" title="完成服务"></flow-state>
+        </Flow>
         <FormPreview
           header-label="工单状态"
           :key="index+'fp'"
@@ -28,7 +42,7 @@
           :footer-buttons="WORKING_STATUS.includes(d.status)?dict2button(d):[]"
           :name="[d,index]"
         />
-        <br :key="index + 'd'" />
+        <br :key="index + 'd'" /> -->
       </template>
 
       <infinite-loading @infinite="loadMore" spinner="circles">
@@ -58,7 +72,11 @@
     </template>
     <template v-else-if="tabNum == 3">
       <group>
-        <popup-radio title="排序方式" :options="ANNOUNCEMENTS_ORDER_OPTIONS" v-model="announcements_order"></popup-radio>
+        <popup-radio
+          title="排序方式"
+          :options="ANNOUNCEMENTS_ORDER_OPTIONS"
+          v-model="announcements_order"
+        ></popup-radio>
       </group>
       <template v-for="(ann,idx) in ordered_announcements">
         <Card :key="idx+'c'">
@@ -112,21 +130,33 @@ import {
   Box,
   Cell,
   Group,
-  PopupRadio
+  PopupRadio,
+  Flow,
+  FlowState,
+  FlowLine
 } from 'vux'
 import InfiniteLoading from 'vue-infinite-loading'
 import Popupcontent from '@/components/PopupContent'
 import VueMarkdown from 'vue-markdown'
 import Calendar from '@/components/Calendar'
+import RecordPreview from '@/components/RecordPreview'
 
 let cmpHelper = function (attrName, less = false) {
   if (less) {
     return (a, b) => {
-      if (a[attrName] > b[attrName]) { return 1 } else if (a[attrName] < b[attrName]) { return -1 } else return 0
+      if (a[attrName] > b[attrName]) {
+        return 1
+      } else if (a[attrName] < b[attrName]) {
+        return -1
+      } else return 0
     }
   } else {
     return (a, b) => {
-      if (a[attrName] > b[attrName]) { return -1 } else if (a[attrName] < b[attrName]) { return 1 } else return 0
+      if (a[attrName] > b[attrName]) {
+        return -1
+      } else if (a[attrName] < b[attrName]) {
+        return 1
+      } else return 0
     }
   }
 }
@@ -148,7 +178,11 @@ export default {
     Cell,
     Group,
     Calendar,
-    PopupRadio
+    PopupRadio,
+    Flow,
+    FlowState,
+    FlowLine,
+    RecordPreview
   },
   data: () => ({
     tabTitles: ['诊所服务日历', '正在处理', '已处理', '公告'],
@@ -175,31 +209,31 @@ export default {
     announcements: [],
     WORKING_STATUS: [0, 1, 2, 4, 5],
     FINISHED_STATUS: [3, 6, 7, 8],
-    STATUS_MAP: {
-      0: '上单问题未解决',
-      1: '预约待确认',
-      2: '预约已确认',
-      3: '预约已驳回',
-      4: '登记待受理',
-      5: '正在处理',
-      6: '已解决问题',
-      7: '建议返厂',
-      8: '交给明天解决',
-      _: 'error'
-    },
-    KEY_TRANSLATION: {
-      appointment_time: '预约时间',
-      campus: '校区',
-      description: '问题描述',
-      model: '电脑型号',
-      phone_num: '手机号',
-      realname: '真实姓名',
-      reject_reason: '工单申请驳回原因',
-      status: '工单状态',
-      url: 'URL',
-      worker_description: '工作人员对问题描述',
-      password: '电脑开机密码'
-    },
+    // STATUS_MAP: {
+    //   0: '上单问题未解决',
+    //   1: '预约待确认',
+    //   2: '预约已确认',
+    //   3: '预约已驳回',
+    //   4: '登记待受理',
+    //   5: '正在处理',
+    //   6: '已解决问题',
+    //   7: '建议返厂',
+    //   8: '交给明天解决',
+    //   _: 'error'
+    // },
+    // KEY_TRANSLATION: {
+    //   appointment_time: '预约时间',
+    //   campus: '校区',
+    //   description: '问题描述',
+    //   model: '电脑型号',
+    //   phone_num: '手机号',
+    //   realname: '真实姓名',
+    //   reject_reason: '工单申请驳回原因',
+    //   status: '工单状态',
+    //   url: 'URL',
+    //   worker_description: '工作人员对问题描述',
+    //   password: '电脑开机密码'
+    // },
     CAMPUS_MAP: {
       LX: '良乡',
       ZGC: '中关村'
@@ -209,7 +243,12 @@ export default {
       CM: '普通公告'
     },
     ANNOUNCEMENTS_ORDER_OPTIONS: [
-      '最新创建', '最早创建', '最新修改', '最早修改', '最晚过期', '最早过期'
+      '最新创建',
+      '最早创建',
+      '最新修改',
+      '最早修改',
+      '最晚过期',
+      '最早过期'
     ]
   }),
   computed: {
@@ -258,31 +297,31 @@ export default {
       this.tabNum =
         (this.tabNum + this.tabTitles.length) % this.tabTitles.length
     },
-    dict2list (data) {
-      let keys = [
-        'appointment_time',
-        'description',
-        'model',
-        'password',
-        'campus',
-        'phone_num',
-        'realname',
-        'workder_description',
-        'reject_reason'
-      ]
-      let ret = []
-      ret.push({ label: '工单号', value: this.getId(data.url) })
-      for (let key of keys) {
-        if (data[key]) {
-          ret.push({ label: this.KEY_TRANSLATION[key], value: data[key] })
-        }
-      }
+    // dict2list (data) {
+    //   let keys = [
+    //     'appointment_time',
+    //     'description',
+    //     'model',
+    //     'password',
+    //     'campus',
+    //     'phone_num',
+    //     'realname',
+    //     'workder_description',
+    //     'reject_reason'
+    //   ]
+    //   let ret = []
+    //   ret.push({ label: '工单号', value: this.getId(data.url) })
+    //   for (let key of keys) {
+    //     if (data[key]) {
+    //       ret.push({ label: this.KEY_TRANSLATION[key], value: data[key] })
+    //     }
+    //   }
 
-      return ret
-    },
-    dict2button (data) {
-      return [{ style: 'primary', text: '编辑', onButtonClick: this.popup }]
-    },
+    //   return ret
+    // },
+    // dict2button (data) {
+    //   return [{ style: 'primary', text: '编辑', onButtonClick: this.popup }]
+    // },
     popup (name) {
       this.display = !this.display
       this.record = name[0]
@@ -307,12 +346,12 @@ export default {
         }
       })
     },
-    getId (url) {
-      let res = url.match(/\/\d+\//)
-      res = res[res.length - 1]
-      res = res.slice(1, res.length - 1)
-      return res.padStart(8, '0')
-    },
+    // getId (url) {
+    //   let res = url.match(/\/\d+\//)
+    //   res = res[res.length - 1]
+    //   res = res.slice(1, res.length - 1)
+    //   return res.padStart(8, '0')
+    // },
     initRecords () {
       this.next = this.Const + 'wechat/'
     },
