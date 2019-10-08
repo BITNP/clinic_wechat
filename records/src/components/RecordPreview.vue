@@ -19,6 +19,7 @@
       <flow-state state="4" title="完成服务" :is-done="FINISHED_STATUS.includes(record.status)"></flow-state>
     </Flow>
     <FormPreview
+      class="form-preview"
       header-label="工单状态"
       :header-value="STATUS_MAP[record.status]"
       :body-items="dict2list(record)"
@@ -105,4 +106,7 @@ export default {
 </script>
 
 <style>
+.form-preview{
+  background-color:blueviolet;
+}
 </style>
