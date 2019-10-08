@@ -232,7 +232,7 @@ export default {
       this.touch.x = e.touches[0].clientX
     },
     touchEnd (e) {
-      const threshold = 150
+      const threshold = 75
       let endX = e.changedTouches[0].clientX
       if (endX - this.touch.x > threshold) {
         this.tabNum -= 1
