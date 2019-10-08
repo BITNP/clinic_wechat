@@ -159,7 +159,7 @@ export default {
     debug_request_data: '',
     tabNum: 0,
     display_new_form: false,
-    announcements_order: '最新创建',
+    announcements_order: '优先级',
     scroll: false,
     display: false,
     dates: [],
@@ -185,6 +185,7 @@ export default {
       CM: '普通公告'
     },
     ANNOUNCEMENTS_ORDER_OPTIONS: [
+      '优先级',
       '最新创建',
       '最早创建',
       '最新修改',
@@ -207,7 +208,9 @@ export default {
     },
     ordered_announcements () {
       let sortby
-      if (this.announcements_order === '最新创建') {
+      if (this.announcements_order === '优先级') {
+        sortby = cmpHelper('priority', true)
+      } else if (this.announcements_order === '最新创建') {
         sortby = cmpHelper('createdTime')
       } else if (this.announcements_order === '最早创建') {
         sortby = cmpHelper('createdTime', true)
