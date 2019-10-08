@@ -106,7 +106,8 @@ export default {
 </script>
 
 <style>
-.form-preview{
+/* 这代码确实有用 */
+/* .form-preview{
   background-color:blueviolet;
-}
+} */
 </style>
