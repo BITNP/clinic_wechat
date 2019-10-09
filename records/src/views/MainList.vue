@@ -253,9 +253,12 @@ export default {
         return
       }
       this.$http.get(this.next).then(({ data }) => {
-        console.log(data)
-
-        this.debug_more = data
+        if (typeof (data) === 'string') {
+          // 如果返回了string，表示服务端可能出现错误
+          this.$store.commit('popError', 'Oops! 我们的服务器出现了一些问题')
+          return
+        }
+        // this.debug_more = data
         this.all_records = this.all_records.concat(data.results)
         this.next = data.next
         if (this.next) {
