@@ -12,7 +12,7 @@
       ></calendar>
       <x-textarea
         title="问题描述"
-        placeholder="请描述您所遇到的问题"
+        placeholder="请尽可能详细地描述您所遇到的问题"
         required
         :max="300"
         v-model="record.description"
