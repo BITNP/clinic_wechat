@@ -17,18 +17,26 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(date, idx) in datesSelected" :key="idx">
-          <td>{{date.campus}}</td>
-          <td>{{date.capacity}}</td>
-          <td>{{date.count}}</td>
-          <td>{{date.finish}}</td>
-        </tr>
+        <template v-for="(date, idx) in datesSelected">
+          <tr :key="idx">
+            <td>{{date.campus}}</td>
+            <td>{{date.capacity}}</td>
+            <td>{{date.count}}</td>
+            <td>{{date.finish}}</td>
+          </tr>
+          <tr :key="idx+'1'">
+            <td colspan="4">
+              {{new Date('0001-01-01 '+date.startTime).toLocaleTimeString()}} ~ {{
+              new Date('0001-01-01 '+ date.endTime).toLocaleTimeString()}}
+            </td>
+          </tr>
+        </template>
       </tbody>
     </x-table>
     <br />
     <Divider>网络开拓者协会 - 电脑诊所</Divider>
     <!-- {{value}}
-    {{datesSelected}} -->
+    {{datesSelected}}-->
   </div>
   <!-- <vue-event-calendar :events="events" :title="'容量详情'">
     <template slot-scope="props">
