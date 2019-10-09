@@ -13,7 +13,7 @@
       <x-button type="primary" @click.native="submit">提交</x-button>
     </box>
     <toast v-model="show_toast" type="text" :time="800" :text="toast_text"></toast>
-    <TOC v-model="toc" />
+    <TOC v-model="toc" @toggle-toc="toc = false" />
   </div>
 </template>
 
@@ -73,17 +73,27 @@ export default {
         })
         .then(({ data }) => {
           console.log(typeof data)
-          if (typeof (data) !== 'object' && data.includes('wslite.http.HTTPResponse')) {
+          if (
+            typeof data !== 'object' &&
+            data.includes('wslite.http.HTTPResponse')
+          ) {
             this.toast('提交失败！您已有工单或网络出现故障。')
             return
           }
           this.$router.push('/success')
         })
-        .catch(({response}) => {
+        .catch(({ response }) => {
           console.log(response)
-          if (response && response.status === 400 && response.data && response.data[0].includes('已超出')) {
+          if (
+            response &&
+            response.status === 400 &&
+            response.data &&
+            response.data[0].includes('已超出')
+          ) {
             this.toast('提交失败！已超出可提交工单数量')
-          } else { this.toast('Oops! 我们遇到了一些技术问题') }
+          } else {
+            this.toast('Oops! 我们遇到了一些技术问题')
+          }
         })
     }
   },

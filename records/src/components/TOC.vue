@@ -27,11 +27,11 @@ export default {
   props: ['show'],
   model: {
     prop: 'show',
-    event: 'change'
+    event: 'click'
   },
   methods: {
     toggle () {
-      this.show = !this.show
+      this.$emit('toggle-toc')
     },
     getTOC () {
       this.axios.get(`${this.Const}announcement/toc/`).then(({ data }) => {

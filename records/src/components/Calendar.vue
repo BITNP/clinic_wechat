@@ -35,19 +35,7 @@
     </x-table>
     <br />
     <Divider>网络开拓者协会 - 电脑诊所</Divider>
-    <!-- {{value}}
-    {{datesSelected}}-->
   </div>
-  <!-- <vue-event-calendar :events="events" :title="'容量详情'">
-    <template slot-scope="props">
-      <div v-for="(event, index) in props.showEvents" class="event-item" :key="index">
-        In here do whatever you want, make you owner event template
-        {{event.campus}} - {{event.title}}
-        <br />
-        总容量：{{event.capacity}}，已预约：{{event.count}}，已完成：{{event.finish}}
-      </div>
-    </template>
-  </vue-event-calendar>-->
 </template>
 
 <script>
