@@ -1,14 +1,21 @@
 <template>
   <div>
     <group title="必填项">
-      <selector title="校区" required v-model="record.campus" :options="campus" direction="rtl"></selector>
+      <selector
+        title="校区"
+        required
+        :readonly="!!record.appointment_time"
+        v-model="record.campus"
+        :options="campus"
+        direction="rtl"
+      ></selector>
       <calendar
         :readonly="!create"
         title="预约时间"
         required
         v-model="record.appointment_time"
         :disable-date-function="validDate"
-        placeholder="请选择一个工作中的日期"
+        placeholder="请选择一个日期，可选表示正常营业"
       ></calendar>
       <x-textarea
         title="问题描述"
@@ -55,6 +62,7 @@ export default {
       return !this.dates.includes(date.formatedDate)
     }
   },
+  watch: {},
   computed: {
     campus () {
       let campus = this.$store.state.campus
@@ -63,6 +71,7 @@ export default {
     dates () {
       return this.$store.state.dates
         .filter(v => v.campus === this.record.campus)
+        .filter(v => v.capacity > v.count)
         .map(date => date.date)
     }
   }
