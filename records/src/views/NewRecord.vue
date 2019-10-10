@@ -12,7 +12,6 @@
     <box gap="10px 10px">
       <x-button type="primary" @click.native="submit">提交</x-button>
     </box>
-    <toast v-model="show_toast" type="text" :time="800" :text="toast_text"></toast>
     <TOC v-model="toc" @toggle-toc="toc = false" />
   </div>
 </template>
@@ -43,15 +42,9 @@ export default {
     dates: [],
     record: {
       campus: ''
-    },
-    show_toast: false,
-    toast_text: ''
+    }
   }),
   methods: {
-    toast (text) {
-      this.show_toast = true
-      this.toast_text = text
-    },
     submit () {
       if (
         !(
@@ -60,11 +53,11 @@ export default {
           this.record.description
         )
       ) {
-        this.toast('有选项仍未填完')
+        this.$store.commit('popError', '有选项仍未填完')
         return
       }
       if (this.agree === false) {
-        this.toast('请在提交前先阅读并同意我们的免责声明')
+        this.$store.commit('popError', '请在提交前先阅读并同意我们的免责声明')
         return
       }
       this.axios
@@ -77,7 +70,7 @@ export default {
             typeof data !== 'object' &&
             data.includes('wslite.http.HTTPResponse')
           ) {
-            this.toast('提交失败！您已有工单或网络出现故障。')
+            this.$store.commit('popError', '提交失败！您已有工单或网络出现故障。')
             return
           }
           this.$router.push('/success')
@@ -91,13 +84,13 @@ export default {
             response.data[0] &&
             response.data[0].includes('已超出')
           ) {
-            this.toast('提交失败！已超出可提交工单数量')
+            this.$store.commit('popError', '提交失败！已超出可提交工单数量')
           } else if (
             response && response.status === 400 && response.data && response.data.appointment_time
           ) {
-            this.toast('当前日期该位置诊所停止营业')
+            this.$store.commit('popError', '当前日期该位置诊所停止营业')
           } else {
-            this.toast('Oops! 我们遇到了一些技术问题')
+            this.$store.commit('popError', 'Oops! 我们遇到了一些技术问题')
           }
         })
     }

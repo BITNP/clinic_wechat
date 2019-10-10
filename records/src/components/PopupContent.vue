@@ -29,7 +29,6 @@
         <br />
       </div>
     </card>
-    <toast v-model="show_toast" type="text" :time="800" :text="toast_text"></toast>
   </div>
 </template>
 
@@ -64,15 +63,9 @@ export default {
     Box
   },
   data: () => ({
-    delete_confirm: false,
-    show_toast: false,
-    toast_text: ''
+    delete_confirm: false
   }),
   methods: {
-    toast (text) {
-      this.show_toast = true
-      this.toast_text = text
-    },
     toggleDelete (event) {
       this.delete_confirm = !this.delete_confirm
       return false
@@ -105,12 +98,10 @@ export default {
         .put(this.fixUrl(this.$props.record.url), { ..._record })
         .then(() => {
           this.$store.commit('popSuccess', '更新成功')
-          // this.toast('更新成功')
         })
         .catch((e) => {
           console.error(e)
           this.$store.commit('popError', 'Oops! 我们遇到了一些技术问题')
-          // this.toast('Oops! 我们遇到了一些技术问题')
         })
     },
     fixUrl (url) {
