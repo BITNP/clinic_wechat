@@ -73,11 +73,6 @@ axios.interceptors.request.use(function (config) {
 // Add a response interceptor
 axios.interceptors.response.use(function (response) {
   // Do something with response data
-  if (response.request.method === 'GET' && response.status === 204) {
-    // No content, turn to []
-    console.log('get response empty')
-    response.data = []
-  }
   return response
 }, function (error) {
   // Do something with response error

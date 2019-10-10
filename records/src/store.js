@@ -37,12 +37,21 @@ export default new Vuex.Store({
           console.log(data)
           state.campus = data
         })
-        .catch(e => (state.toast = newToast('操作失败')))
+        .catch(e => {
+          console.error(e)
+          state.toast = newToast('无法获取数据')
+        })
     },
     getDates (state) {
       Axios.get(Vue.prototype.Const + 'date/').then(({ data }) => {
-        console.log(data)
+        if (!data || (typeof (data) === 'string')) {
+          // No content
+          data = []
+        }
         state.dates = data
+      }).catch(e => {
+        console.error(e)
+        state.toast = newToast('无法获取数据')
       })
     }
   },

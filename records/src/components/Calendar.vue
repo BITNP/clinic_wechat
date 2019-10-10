@@ -34,14 +34,24 @@
       </tbody>
     </x-table>
     <br />
+    <template v-for="(c, idx) in campus">
+      
+      <flexbox v-if="dates.filter(v=>v.campus===c.name).length===0" :key="idx">
+        <flexbox-item>
+          <div class="flex-demo">{{c.name}} 未来没有可预约时间</div>
+        </flexbox-item>
+      </flexbox>
+    </template>
+    <br />
+
     <Divider>网络开拓者协会 - 电脑诊所</Divider>
   </div>
 </template>
 
 <script>
-import { InlineCalendar, XTable, Divider } from 'vux'
+import { InlineCalendar, XTable, Divider, Flexbox, FlexboxItem } from 'vux'
 export default {
-  components: { InlineCalendar, XTable, Divider },
+  components: { InlineCalendar, XTable, Divider, Flexbox, FlexboxItem },
   data: () => ({ value: null }),
   computed: {
     events () {
@@ -53,6 +63,9 @@ export default {
         finish: v.finish,
         campus: v.campus
       }))
+    },
+    campus () {
+      return this.$store.state.campus
     },
     dates () {
       return this.$store.state.dates
@@ -71,12 +84,6 @@ export default {
     }
   },
   methods: {
-    // monthChange (month) {
-    //   console.log(month)
-    // },
-    // dayChange (day) {
-    //   console.log(day)
-    // },
     validDate (date) {
       // return false if valid
       return !this.dates.map(date => date.date).includes(date.formatedDate)
@@ -91,4 +98,9 @@ export default {
 </script>
 
 <style>
+.flex-demo {
+  text-align: center;
+  border-radius: 4px;
+  background-clip: padding-box;
+}
 </style>

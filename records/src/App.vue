@@ -4,7 +4,7 @@
     <toast
       v-model="toast.show"
       type="text"
-      :time="800"
+      :time="2000"
       is-show-mask
       :text="toast.text"
       :position="toast.position"

@@ -102,14 +102,6 @@ export default {
       return this.$store.state.campus
     }
   },
-  watch: {
-    // campus: function (val) {
-    //   console.log('hihihihi')
-    //   if (this.campus && this.campus.length > 0) {
-    //     this.record.campus = this.$store.state.campus[0].name
-    //   }
-    // }
-  },
   mounted () {
     if (this.campus && this.campus.length > 0) {
       this.record.campus = this.$store.state.campus[0].name
