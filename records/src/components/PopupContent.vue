@@ -81,8 +81,6 @@ export default {
       this.axios
         .delete(this.fixUrl(this.$props.record.url))
         .then(({data, statusCode}) => {
-          console.log(data)
-          console.log(statusCode)
           this.$router.push({
             name: 'success',
             params: {
@@ -90,8 +88,9 @@ export default {
             }
           })
         })
-        .catch(error => {
-          console.log(error.response)
+        .catch(e => {
+          console.error(e)
+          this.$store.commit('popError')
         })
     },
     update () {
@@ -105,10 +104,13 @@ export default {
       this.axios
         .put(this.fixUrl(this.$props.record.url), { ..._record })
         .then(() => {
-          this.toast('更新成功')
+          this.$store.commit('popSuccess', '更新成功')
+          // this.toast('更新成功')
         })
-        .catch(() => {
-          this.toast('Oops! 我们遇到了一些技术问题')
+        .catch((e) => {
+          console.error(e)
+          this.$store.commit('popError', 'Oops! 我们遇到了一些技术问题')
+          // this.toast('Oops! 我们遇到了一些技术问题')
         })
     },
     fixUrl (url) {

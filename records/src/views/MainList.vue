@@ -255,6 +255,7 @@ export default {
       this.$http.get(this.next).then(({ data }) => {
         if (typeof (data) === 'string') {
           // 如果返回了string，表示服务端可能出现错误
+          console.error(data)
           this.$store.commit('popError', 'Oops! 我们的服务器出现了一些问题')
           return
         }
@@ -267,6 +268,9 @@ export default {
           // $state.loaded()
           $state.complete()
         }
+      }).catch(e => {
+        console.error(e)
+        this.$store.commit('popError', '无法获取数据')
       })
     },
     initRecords () {
