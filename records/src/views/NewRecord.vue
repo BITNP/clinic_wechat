@@ -88,9 +88,14 @@ export default {
             response &&
             response.status === 400 &&
             response.data &&
+            response.data[0] &&
             response.data[0].includes('已超出')
           ) {
             this.toast('提交失败！已超出可提交工单数量')
+          } else if (
+            response && response.status === 400 && response.data && response.data.appointment_time
+          ) {
+            this.toast('当前日期该位置诊所停止营业')
           } else {
             this.toast('Oops! 我们遇到了一些技术问题')
           }
