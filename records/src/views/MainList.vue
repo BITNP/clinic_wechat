@@ -1,5 +1,6 @@
 <template>
-  <div @touchstart="touchStart" @touchend="touchEnd">
+  <!-- <div @touchstart="touchStart" @touchend="touchEnd"> -->
+  <div>
     <div>
       <tab>
         <tab-item
@@ -110,25 +111,25 @@ import VueMarkdown from 'vue-markdown'
 import Calendar from '@/components/Calendar'
 import RecordPreview from '@/components/RecordPreview'
 
-let cmpHelper = function (attrName, less = false) {
-  if (less) {
-    return (a, b) => {
-      if (a[attrName] > b[attrName]) {
-        return 1
-      } else if (a[attrName] < b[attrName]) {
-        return -1
-      } else return 0
-    }
-  } else {
-    return (a, b) => {
-      if (a[attrName] > b[attrName]) {
-        return -1
-      } else if (a[attrName] < b[attrName]) {
-        return 1
-      } else return 0
-    }
-  }
-}
+// let cmpHelper = function (attrName, less = false) {
+//   if (less) {
+//     return (a, b) => {
+//       if (a[attrName] > b[attrName]) {
+//         return 1
+//       } else if (a[attrName] < b[attrName]) {
+//         return -1
+//       } else return 0
+//     }
+//   } else {
+//     return (a, b) => {
+//       if (a[attrName] > b[attrName]) {
+//         return -1
+//       } else if (a[attrName] < b[attrName]) {
+//         return 1
+//       } else return 0
+//     }
+//   }
+// }
 
 export default {
   components: {
@@ -207,43 +208,43 @@ export default {
           r => !this.WORKING_STATUS.includes(r.status)
         )
       }
-    },
-    ordered_announcements () {
-      let sortby
-      if (this.announcements_order === '优先级') {
-        sortby = cmpHelper('priority', true)
-      } else if (this.announcements_order === '最新创建') {
-        sortby = cmpHelper('createdTime')
-      } else if (this.announcements_order === '最早创建') {
-        sortby = cmpHelper('createdTime', true)
-      } else if (this.announcements_order === '最新修改') {
-        sortby = cmpHelper('lastEditedTime')
-      } else if (this.announcements_order === '最早修改') {
-        sortby = cmpHelper('lastEditedTime', true)
-      } else if (this.announcements_order === '最晚过期') {
-        sortby = cmpHelper('expireTime')
-      } else {
-        // 最早过期
-        sortby = cmpHelper('expireTime', true)
-      }
-      return this.announcements.sort(sortby)
     }
+    // ordered_announcements () {
+    //   let sortby
+    //   if (this.announcements_order === '优先级') {
+    //     sortby = cmpHelper('priority', true)
+    //   } else if (this.announcements_order === '最新创建') {
+    //     sortby = cmpHelper('createdTime')
+    //   } else if (this.announcements_order === '最早创建') {
+    //     sortby = cmpHelper('createdTime', true)
+    //   } else if (this.announcements_order === '最新修改') {
+    //     sortby = cmpHelper('lastEditedTime')
+    //   } else if (this.announcements_order === '最早修改') {
+    //     sortby = cmpHelper('lastEditedTime', true)
+    //   } else if (this.announcements_order === '最晚过期') {
+    //     sortby = cmpHelper('expireTime')
+    //   } else {
+    //     // 最早过期
+    //     sortby = cmpHelper('expireTime', true)
+    //   }
+    //   return this.announcements.sort(sortby)
+    // }
   },
   methods: {
-    touchStart (e) {
-      this.touch.x = e.touches[0].clientX
-    },
-    touchEnd (e) {
-      const threshold = 75
-      let endX = e.changedTouches[0].clientX
-      if (endX - this.touch.x > threshold) {
-        this.tabNum -= 1
-      } else if (endX - this.touch.x < -threshold) {
-        this.tabNum += 1
-      }
-      this.tabNum =
-        (this.tabNum + this.tabTitles.length) % this.tabTitles.length
-    },
+    // touchStart (e) {
+    //   this.touch.x = e.touches[0].clientX
+    // },
+    // touchEnd (e) {
+    //   const threshold = 75
+    //   let endX = e.changedTouches[0].clientX
+    //   if (endX - this.touch.x > threshold) {
+    //     this.tabNum -= 1
+    //   } else if (endX - this.touch.x < -threshold) {
+    //     this.tabNum += 1
+    //   }
+    //   this.tabNum =
+    //     (this.tabNum + this.tabTitles.length) % this.tabTitles.length
+    // },
     popup (name) {
       this.display = !this.display
       this.record = name[0]
