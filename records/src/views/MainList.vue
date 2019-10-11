@@ -43,13 +43,13 @@
       </div>
     </template>
     <template v-else-if="tabNum == 3">
-      <group>
+      <!-- <group>
         <popup-radio
           title="排序方式"
           :options="ANNOUNCEMENTS_ORDER_OPTIONS"
           v-model="announcements_order"
         ></popup-radio>
-      </group>
+      </group> -->
       <template v-for="(ann,idx) in ordered_announcements">
         <Card :key="idx+'c'">
           <div slot="header">
