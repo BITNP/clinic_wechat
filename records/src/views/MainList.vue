@@ -15,6 +15,16 @@
         <RecordPreview :key="index" :record="d" @edit-current-record="popup([d,index])"></RecordPreview>
       </template>
 
+      <br />
+      <Box
+        gap="10px 10px"
+        v-if="tabNum == 1 && filtered_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0"
+      >
+        <x-button type="primary" action-type="button" link="/new">新建工单</x-button>
+      </Box>
+      <br />
+
+
       <infinite-loading @infinite="loadMore" spinner="circles">
         <template slot="no-results">
           <divider>网络开拓者协会 - 电脑诊所</divider>
@@ -24,14 +34,6 @@
         </template>
       </infinite-loading>
 
-      <br />
-      <Box
-        gap="10px 10px"
-        v-if="tabNum == 1 && filtered_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0"
-      >
-        <x-button type="primary" action-type="button" link="/new">新建工单</x-button>
-      </Box>
-      <br />
 
       <br />
       <div v-transfer-dom>
