@@ -26,8 +26,8 @@
           </tr>
           <tr :key="idx+'1'">
             <td colspan="4">
-              {{new Date('0001-01-01 '+date.startTime).toLocaleTimeString()}} ~ {{
-              new Date('0001-01-01 '+ date.endTime).toLocaleTimeString()}}
+              {{new Date(date.date+' '+date.startTime).toLocaleTimeString()}} ~ {{
+              new Date(date.date+' '+date.endTime).toLocaleTimeString()}}
             </td>
           </tr>
         </template>
@@ -35,7 +35,6 @@
     </x-table>
     <br />
     <template v-for="(c, idx) in campus">
-      
       <flexbox v-if="dates.filter(v=>v.campus===c.name).length===0" :key="idx">
         <flexbox-item>
           <div class="flex-demo">{{c.name}} 未来没有可预约时间</div>
@@ -49,7 +48,7 @@
 </template>
 
 <script>
-import { InlineCalendar, XTable, Divider, Flexbox, FlexboxItem } from 'vux'
+import { InlineCalendar, XTable, Divider, Flexbox, FlexboxItem } from 'vux';
 export default {
   components: { InlineCalendar, XTable, Divider, Flexbox, FlexboxItem },
   data: () => ({ value: null }),

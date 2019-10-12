@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{record}}
     <group title="必填项">
       <!--  :readonly="!!record.appointment_time" -->
       <selector
