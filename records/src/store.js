@@ -21,7 +21,8 @@ export default new Vuex.Store({
       position: ''
     },
     campus: [],
-    dates: []
+    dates: [],
+    announcements: []
   },
   mutations: {
     popSuccess (state, text = '操作成功') {
@@ -53,6 +54,21 @@ export default new Vuex.Store({
         console.error(e)
         state.toast = newToast('无法获取数据')
       })
+    },
+    initAnnouncements (state) {
+      // get announcements from api
+      Axios
+        .get(`${Vue.prototype.Const}announcement/`)
+        .then(({ data }) => {
+          data.map(v => {
+            v.show = false
+          })
+          state.announcements = data
+          console.log(state.announcements)
+        })
+        .catch(e => {
+          state.toast = newToast('无法获取公告信息')
+        })
     }
   },
   actions: {},
