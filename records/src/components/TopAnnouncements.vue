@@ -1,10 +1,11 @@
 <template>
   <div>
     <transition name="switch" mode="out-in">
-        <div
-          :key="index"
-          style="margin: 3px 10px; text-align:center; height:40px;"
-        > {{topAnnouncements[index].content}}</div>
+      <div
+        :key="index"
+        v-if="topAnnouncements.length>0"
+        style="margin: 3px 10px; text-align:center; height:40px;"
+      >{{topAnnouncements[index].content}}</div>
     </transition>
   </div>
 </template>
