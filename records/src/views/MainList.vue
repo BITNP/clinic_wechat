@@ -11,6 +11,9 @@
         >{{tabTitle}}</tab-item>
       </tab>
     </div>
+
+    <TopAnnouncements></TopAnnouncements>
+    
     <template v-if="[1,2].includes(tabNum)">
       <template v-for="(d,index) in filtered_records">
         <RecordPreview :key="index" :record="d" @edit-current-record="popup([d,index])"></RecordPreview>
@@ -82,6 +85,7 @@ import Popupcontent from '@/components/PopupContent'
 import Calendar from '@/components/Calendar'
 import RecordPreview from '@/components/RecordPreview'
 import Announcements from '@/components/Announcements'
+import TopAnnouncements from '@/components/TopAnnouncements'
 
 export default {
   components: {
@@ -104,7 +108,8 @@ export default {
     FlowState,
     FlowLine,
     RecordPreview,
-    Announcements
+    Announcements,
+    TopAnnouncements
   },
   data: () => ({
     tabTitles: ['诊所服务日历', '正在处理', '已处理', '公告'],
