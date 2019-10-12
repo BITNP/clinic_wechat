@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { InlineCalendar, XTable, Divider, Flexbox, FlexboxItem } from 'vux';
+import { InlineCalendar, XTable, Divider, Flexbox, FlexboxItem } from 'vux'
 export default {
   components: { InlineCalendar, XTable, Divider, Flexbox, FlexboxItem },
   data: () => ({ value: null }),
