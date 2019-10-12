@@ -68,7 +68,8 @@ export default {
     announcements_order: '优先级',
     ANNOUNCEMENTS_MAP: {
       TOC: '免责声明',
-      AN: '普通公告'
+      AN: '普通公告',
+      TA: '置顶公告'
     },
     ANNOUNCEMENTS_ORDER_OPTIONS: [
       '优先级',
