@@ -1,13 +1,10 @@
 <template>
   <div>
     <transition name="switch" mode="out-in">
-      <template v-for="(ta,idx) in topAnnouncements">
         <div
-          :key="idx"
-          v-if="idx === index"
+          :key="index"
           style="margin: 3px 10px; text-align:center; height:40px;"
-        > {{topAnnouncements[idx].content}}</div>
-      </template>
+        > {{topAnnouncements[index].content}}</div>
     </transition>
   </div>
 </template>
