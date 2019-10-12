@@ -1,13 +1,15 @@
 <template>
   <div>
+    {{record}}
     <group title="必填项">
+      <!--  :readonly="!!record.appointment_time" -->
       <selector
         title="校区"
         required
-        :readonly="!!record.appointment_time"
         v-model="record.campus"
         :options="campus"
         direction="rtl"
+        @change.native="delete record.appointment_time"
       ></selector>
       <calendar
         :readonly="!create"
