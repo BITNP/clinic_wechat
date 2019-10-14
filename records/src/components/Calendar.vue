@@ -26,8 +26,8 @@
           </tr>
           <tr :key="idx+'1'">
             <td colspan="4">
-              {{new Date(date.date+' '+date.startTime).toLocaleTimeString()}} ~ {{
-              new Date(date.date+' '+date.endTime).toLocaleTimeString()}}
+              {{date.startTime.slice(0,5)}} ~ {{
+              date.endTime.slice(0,5)}}
             </td>
           </tr>
         </template>
