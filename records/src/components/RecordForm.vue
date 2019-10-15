@@ -28,14 +28,14 @@
     </group>
     <group title="选填项，这将有助于我们提供更好的服务">
       <x-input title="电脑型号" text-align="right" v-model="record.model"
-      max="200"></x-input>
+      :max="200"></x-input>
       <x-input title="手机号" is-type="china-mobile" text-align="right" v-model="record.phone_num"></x-input>
-      <x-input title="真实姓名" text-align="right" v-model="record.realname" max="50"></x-input>
+      <x-input title="真实姓名" text-align="right" v-model="record.realname" :max="50"></x-input>
       <x-input
         title="电脑开机密码"
         placeholder="帮助我们唤醒休眠的电脑"
         text-align="right"
-        max="256"
+        :max="256"
         v-model="record.password"
       ></x-input>
     </group>
