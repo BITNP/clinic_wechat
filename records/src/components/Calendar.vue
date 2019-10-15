@@ -92,13 +92,14 @@ export default {
   },
   mounted () {
     if (this.dates.length > 0) {
-      this.value = this.dates[this.dates.length - 1].date
+      this.value = this.dates[0].date
     }
   }
 }
 </script>
 
-<style>
+<style lang="less">
+
 .flex-demo {
   text-align: center;
   border-radius: 4px;
