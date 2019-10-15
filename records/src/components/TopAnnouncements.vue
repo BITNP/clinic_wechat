@@ -5,7 +5,7 @@
         :key="index"
         v-if="topAnnouncements.length>0"
         style="margin: 3px 10px; text-align:center; height:40px;"
-      >{{topAnnouncements[index].content}}</div>
+      >{{topAnnouncements[index].brief}}</div>
     </transition>
   </div>
 </template>
