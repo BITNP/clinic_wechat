@@ -25,7 +25,8 @@
             <td>{{date.finish}}</td>
           </tr>
           <tr :key="idx+'1'">
-            <td colspan="4">
+            <td colspan="2">{{getAddress(date.campus)}}</td>
+            <td colspan="2">
               {{date.startTime.slice(0,5)}} ~ {{
               date.endTime.slice(0,5)}}
             </td>
@@ -48,7 +49,7 @@
 </template>
 
 <script>
-import { InlineCalendar, XTable, Divider, Flexbox, FlexboxItem } from 'vux'
+import { InlineCalendar, XTable, Divider, Flexbox, FlexboxItem } from 'vux';
 export default {
   components: { InlineCalendar, XTable, Divider, Flexbox, FlexboxItem },
   data: () => ({ value: null }),
@@ -86,6 +87,9 @@ export default {
     validDate (date) {
       // return false if valid
       return !this.dates.map(date => date.date).includes(date.formatedDate)
+    },
+    getAddress (campusName) {
+      return this.campus.filter(v => v.name === campusName)[0]['address']
     }
   },
   mounted () {
