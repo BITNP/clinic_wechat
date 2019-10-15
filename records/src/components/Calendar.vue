@@ -34,7 +34,6 @@
         </template>
       </tbody>
     </x-table>
-    <br />
     <template v-for="(c, idx) in campus">
       <flexbox v-if="dates.filter(v=>v.campus===c.name).length===0" :key="idx">
         <flexbox-item>
@@ -42,9 +41,8 @@
         </flexbox-item>
       </flexbox>
     </template>
-    <br />
-
     <Divider>网络开拓者协会 - 电脑诊所</Divider>
+
   </div>
 </template>
 
