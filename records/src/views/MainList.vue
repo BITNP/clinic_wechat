@@ -1,5 +1,4 @@
 <template>
-  <!-- <div @touchstart="touchStart" @touchend="touchEnd"> -->
   <div class="page">
     <div class="page-header">
       <tab>
@@ -23,16 +22,12 @@
           <RecordPreview :key="index" :record="d" @edit-current-record="popup([d,index])"></RecordPreview>
         </template>
 
-        <br />
-
-        <br />
-
         <infinite-loading @infinite="loadMore" spinner="circles">
           <template slot="no-results">
-            <divider>网络开拓者协会 - 电脑诊所</divider>
+            <Footer />
           </template>
           <template slot="no-more">
-            <divider>网络开拓者协会 - 电脑诊所</divider>
+            <Footer />
           </template>
         </infinite-loading>
 
@@ -45,9 +40,11 @@
       </template>
       <template v-else-if="tabNum == 3">
         <Announcements></Announcements>
+        <Footer></Footer>
       </template>
       <template v-else>
         <Calendar :dates="dates" />
+        <Footer />
       </template>
     </div>
 
@@ -87,6 +84,7 @@ import Calendar from '@/components/Calendar'
 import RecordPreview from '@/components/RecordPreview'
 import Announcements from '@/components/Announcements'
 import TopAnnouncements from '@/components/TopAnnouncements'
+import Footer from '@/components/Footer'
 
 export default {
   components: {
@@ -110,7 +108,8 @@ export default {
     FlowLine,
     RecordPreview,
     Announcements,
-    TopAnnouncements
+    TopAnnouncements,
+    Footer
   },
   data: () => ({
     tabTitles: ['诊所服务日历', '正在处理', '已处理', '公告'],
@@ -150,20 +149,6 @@ export default {
     }
   },
   methods: {
-    // touchStart (e) {
-    //   this.touch.x = e.touches[0].clientX
-    // },
-    // touchEnd (e) {
-    //   const threshold = 75
-    //   let endX = e.changedTouches[0].clientX
-    //   if (endX - this.touch.x > threshold) {
-    //     this.tabNum -= 1
-    //   } else if (endX - this.touch.x < -threshold) {
-    //     this.tabNum += 1
-    //   }
-    //   this.tabNum =
-    //     (this.tabNum + this.tabTitles.length) % this.tabTitles.length
-    // },
     popup (name) {
       this.display = !this.display
       this.record = name[0]
