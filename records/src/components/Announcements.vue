@@ -20,12 +20,11 @@
         </box>
       </popup>
     </div>
-    <divider>网络开拓者协会 - 电脑诊所</divider>
   </div>
 </template>
 
 <script>
-import { Card, XButton, Divider, Cell, Group, Panel, Popup, Box } from 'vux'
+import { Card, XButton, Cell, Group, Panel, Popup, Box } from 'vux'
 import VueMarkdown from 'vue-markdown'
 
 let cmpHelper = function (attrName, less = false) {
@@ -52,7 +51,6 @@ export default {
   components: {
     Card,
     XButton,
-    Divider,
     Cell,
     Group,
     VueMarkdown,

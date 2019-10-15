@@ -41,7 +41,6 @@
         </flexbox-item>
       </flexbox>
     </template>
-    <Divider>网络开拓者协会 - 电脑诊所</Divider>
 
   </div>
 </template>
