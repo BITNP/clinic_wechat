@@ -1,64 +1,65 @@
 <template>
   <!-- <div @touchstart="touchStart" @touchend="touchEnd"> -->
-  <div>
-    <div>
+  <div class="page">
+    <div class="page-header">
       <tab>
         <tab-item
           v-for="(tabTitle, index) in tabTitles"
           :key="index"
-          @on-item-click="tabNum = index"
+          @on-item-click="tabNum = index; display = false"
           :selected="index == tabNum"
         >{{tabTitle}}</tab-item>
       </tab>
     </div>
+    <div style=";width:100%;">
+      <tab></tab>
+    </div>
 
-    <TopAnnouncements></TopAnnouncements>
-    
-    <template v-if="[1,2].includes(tabNum)">
-      <template v-for="(d,index) in filtered_records">
-        <RecordPreview :key="index" :record="d" @edit-current-record="popup([d,index])"></RecordPreview>
+    <div class="page-content">
+      <TopAnnouncements></TopAnnouncements>
+
+      <template v-if="[1,2].includes(tabNum)">
+        <template v-for="(d,index) in filtered_records">
+          <RecordPreview :key="index" :record="d" @edit-current-record="popup([d,index])"></RecordPreview>
+        </template>
+
+        <br />
+
+        <br />
+
+        <infinite-loading @infinite="loadMore" spinner="circles">
+          <template slot="no-results">
+            <divider>网络开拓者协会 - 电脑诊所</divider>
+          </template>
+          <template slot="no-more">
+            <divider>网络开拓者协会 - 电脑诊所</divider>
+          </template>
+        </infinite-loading>
+
+        <br />
+        <div v-transfer-dom>
+          <popup v-model="display">
+            <Popupcontent v-model="record" :create="false" />
+          </popup>
+        </div>
       </template>
+      <template v-else-if="tabNum == 3">
+        <Announcements></Announcements>
+      </template>
+      <template v-else>
+        <Calendar :dates="dates" />
+      </template>
+    </div>
 
-      <br />
+
+    <div class="page-footer">
       <Box
         gap="10px 10px"
-        v-if="tabNum == 1 && filtered_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0"
+        v-if="all_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0"
       >
-        <x-button type="primary" action-type="button" link="/new">新建工单</x-button>
+        <x-button style=";" type="primary" action-type="button" link="/new">新建工单</x-button>
       </Box>
-      <br />
-
-
-      <infinite-loading @infinite="loadMore" spinner="circles">
-        <template slot="no-results">
-          <divider>网络开拓者协会 - 电脑诊所</divider>
-        </template>
-        <template slot="no-more">
-          <divider>网络开拓者协会 - 电脑诊所</divider>
-        </template>
-      </infinite-loading>
-
-
-      <br />
-      <div v-transfer-dom>
-        <popup v-model="display">
-          <Popupcontent v-model="record" :create="false" />
-        </popup>
-      </div>
-    </template>
-    <template v-else-if="tabNum == 3">
-      <!-- <group>
-        <popup-radio
-          title="排序方式"
-          :options="ANNOUNCEMENTS_ORDER_OPTIONS"
-          v-model="announcements_order"
-        ></popup-radio>
-      </group> -->
-     <Announcements></Announcements>
-    </template>
-    <template v-else>
-      <Calendar :dates="dates" />
-    </template>
+    </div>
   </div>
 </template>
 
@@ -134,7 +135,6 @@ export default {
       LX: '良乡',
       ZGC: '中关村'
     }
-
   }),
   computed: {
     filtered_records () {
@@ -148,7 +148,6 @@ export default {
         )
       }
     }
-
   },
   methods: {
     // touchStart (e) {
@@ -175,31 +174,33 @@ export default {
         $state.complete()
         return
       }
-      this.$http.get(this.next).then(({ data }) => {
-        if (typeof (data) === 'string') {
-          // 如果返回了string，表示服务端可能出现错误
-          console.error(data)
-          this.$store.commit('popError', 'Oops! 我们的服务器出现了一些问题')
-          return
-        }
-        // this.debug_more = data
-        this.all_records = this.all_records.concat(data.results)
-        this.next = data.next
-        if (this.next) {
-          $state.loaded()
-        } else {
-          // $state.loaded()
-          $state.complete()
-        }
-      }).catch(e => {
-        console.error(e)
-        this.$store.commit('popError', '无法获取数据')
-      })
+      this.$http
+        .get(this.next)
+        .then(({ data }) => {
+          if (typeof data === 'string') {
+            // 如果返回了string，表示服务端可能出现错误
+            console.error(data)
+            this.$store.commit('popError', 'Oops! 我们的服务器出现了一些问题')
+            return
+          }
+          // this.debug_more = data
+          this.all_records = this.all_records.concat(data.results)
+          this.next = data.next
+          if (this.next) {
+            $state.loaded()
+          } else {
+            // $state.loaded()
+            $state.complete()
+          }
+        })
+        .catch(e => {
+          console.error(e)
+          this.$store.commit('popError', '无法获取数据')
+        })
     },
     initRecords () {
       this.next = this.Const + 'wechat/'
     }
-
   },
   created () {
     // 放到Store里，还可以进行性能优化
@@ -213,15 +214,36 @@ export default {
 </script>
 
 <style>
-.vux-demo {
-  text-align: center;
+html,
+body,
+.page {
+  height: 100%;
 }
-.logo {
-  width: 100px;
-  height: 100px;
+
+body {
+  overflow: wrap;
 }
-.card-padding {
-  padding: 15px;
-  margin: 40px;
+
+.page {
+  display: flex;
+  flex-direction: column;
+}
+.page-header {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  z-index: 2;
+}
+.page-content {
+  margin-bottom: 42px;
+}
+.page-footer {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  background-color: #fff;
+  z-index: 999;
 }
 </style>
