@@ -48,17 +48,17 @@
       </template>
     </div>
 
-    <div v-if="all_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0">
+    <div v-if="hasOne">
       <Box gap="10px 10px">
         <x-button></x-button>
       </Box>
     </div>
     <div
       class="page-footer"
-      v-if="all_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0"
+      v-if="hasOne"
     >
       <Box gap="10px 10px">
-        <x-button style=";" type="primary" action-type="button" link="/new">新建工单</x-button>
+        <x-button type="primary" action-type="button" link="/new">新建工单</x-button>
       </Box>
     </div>
   </div>
@@ -150,6 +150,9 @@ export default {
           r => !this.WORKING_STATUS.includes(r.status)
         )
       }
+    },
+    hasOne () {
+      return this.all_records.filter(v => this.WORKING_STATUS.includes(v.status)).length === 0
     }
   },
   methods: {
@@ -159,7 +162,7 @@ export default {
       this.record_index = name[1]
     },
     loadMore ($state) {
-      if (!this.next) {
+      if ($state && !this.next) {
         $state.complete()
         return
       }
@@ -168,22 +171,19 @@ export default {
         .then(({ data }) => {
           if (typeof data === 'string') {
             // 如果返回了string，表示服务端可能出现错误
-            console.error(data)
             this.$store.commit('popError', 'Oops! 我们的服务器出现了一些问题')
             return
           }
-          // this.debug_more = data
           this.all_records = this.all_records.concat(data.results)
           this.next = data.next
-          if (this.next) {
+          if ($state && this.next) {
             $state.loaded()
-          } else {
-            // $state.loaded()
+          } else if ($state) {
             $state.complete()
           }
         })
         .catch(e => {
-          console.error(e)
+          console.log(e)
           this.$store.commit('popError', '无法获取数据')
         })
     },
@@ -194,6 +194,9 @@ export default {
   created () {
     // 放到Store里，还可以进行性能优化
     this.initRecords()
+    // 初始化的时候就调用一次，因为需要知道当前有没有已经创建工单
+    // 更好的方式是从后台返回数据
+    this.loadMore()
     this.$store.commit('initAnnouncements')
   },
   mounted () {
