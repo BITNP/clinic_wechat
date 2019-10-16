@@ -57,12 +57,13 @@ def client = new RESTClient(API_HOST);
 client.httpClient.sslTrustAllCerts = true;
 client.defaultCharset = 'UTF-8'
 
+println '[sendto]' + API_HOST
 // def a =  client.httpClient.request.headers.'Content-Type'
 // println a
 
-
-try {
     def data = [:];
+try {
+
     if (requestMethod == "POST"){
 
         def json_params = request.JSON;
@@ -114,17 +115,21 @@ try {
     } else {
         return requestMethod
     }
-	data = JSON.parse(data?.contentAsString)
-    //data = new JsonSlurper().parseText(data?.contentAsString)
-    //data = data?.contentAsString
-    return data
+    if(!data?.contentAsString.isEmpty()) {
+	    return  JSON.parse(data?.contentAsString)
+    }
+    else{ 
+        return JSON.parse('{}')
+    }
 } catch (e) {
     // println "\n\n\n"
     // println e.message
     //println e.getResponse().getContentAsString();
-    // println "\n\n\n"
-
-    return ['errcode': 'query resend error\n' + e.getResponse() ]
+    // println "\n\n\n" 
+    println 'error'
+    // println 'data:' + data.getResponse().contentAsString
+    // println 'error:' + e.message
+    return ['errcode': 'query resend error\n' + e.getMessage() ]
 }
         }
 

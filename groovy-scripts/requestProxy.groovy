@@ -23,7 +23,7 @@ def HEADERS = [apikey: "oh-my-tlb"];
 
 // get badgeNumber
 String badgeNumber = follower?.badgeNumber;
-badgeNumber = badgeNumber? badgeNumber : "电脑端";
+badgeNumber = badgeNumber? badgeNumber : "GUEST";
 
 if (!badgeNumber) {
     return ['errcode': 'badgeNumber initailize error. ' + follower.toString() + '; request-header[url]:' + API_HOST]
@@ -45,9 +45,8 @@ client.httpClient.sslTrustAllCerts = true;
 // def a =  client.httpClient.request.headers.'Content-Type'
 // println a
 
-
+def data = [:];
 try {
-    def data = [:];
     if (requestMethod == "POST"){
 
         def json_params = request.JSON;
@@ -99,15 +98,13 @@ try {
     } else {
         return requestMethod
     }
-	data = JSON.parse(data?.contentAsString)
-    //data = new JsonSlurper().parseText(data?.contentAsString)
-    //data = data?.contentAsString
-    return data
+    if(!data?.contentAsString.isEmpty()) {
+	    return  JSON.parse(data?.contentAsString)
+    }
+    else{ 
+        return JSON.parse('{}')
+    }
 } catch (e) {
-    // println "\n\n\n"
-    // println e.message
-    //println e.getResponse().getContentAsString();
-    // println "\n\n\n"
 
     return ['errcode': 'query resend error\n' + e.getResponse() ]
 }
