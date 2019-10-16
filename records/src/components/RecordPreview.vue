@@ -2,17 +2,17 @@
   <div>
     <Flow>
       <flow-state state="1" title="创建工单" is-done></flow-state>
-      <flow-line :is-done="[0,2,3,4,5,6,7,8].includes(record.status)" tip="正在审核"></flow-line>
+      <flow-line :is-done="[0,2,3,4,5,6,7,8,9].includes(record.status)" tip="正在审核"></flow-line>
 
       <flow-state state="2" title="审核通过" :is-done="[0,2,4,5,6,7,8].includes(record.status)"></flow-state>
       <flow-line
-        :is-done="[3,5,6,7,8].includes(record.status)"
+        :is-done="[3,5,6,7,8,9].includes(record.status)"
         :tip="[0, 2, 4].includes(record.status)?'可以前往诊所' : ''"
       ></flow-line>
 
       <flow-state state="3" title="已到诊所" :is-done="[5,6,7,8].includes(record.status)"></flow-state>
       <flow-line
-        :is-done="[3,6,7,8].includes(record.status)"
+        :is-done="[3,6,7,8,9].includes(record.status)"
         :tip="[5].includes(record.status)?'正在服务':''"
       ></flow-line>
 
@@ -35,7 +35,7 @@ export default {
   components: { Flow, FlowState, FlowLine, FormPreview },
   data: () => ({
     WORKING_STATUS: [0, 1, 2, 4, 5],
-    FINISHED_STATUS: [3, 6, 7, 8],
+    FINISHED_STATUS: [3, 6, 7, 8, 9],
     STATUS_MAP: {
       0: '上单问题未解决',
       1: '预约待确认',
@@ -46,6 +46,7 @@ export default {
       6: '已解决问题',
       7: '建议返厂',
       8: '交给明天解决',
+      9: '未到诊所',
       _: 'error'
     },
     KEY_TRANSLATION: {
