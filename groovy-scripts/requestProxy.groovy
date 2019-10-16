@@ -6,9 +6,7 @@ import groovy.json.JsonSlurper
 def API_HOST = "";
 try{
     API_HOST =  request.getHeader('url');
-    if(!API_HOST){
-        return ['errcode': 'header[url] is empty. ']
-    }
+    API_HOST = 'https://clinic.bitnp.net' + API_HOST
 } catch(e){
     return ['errcode': 'header[url] get error: ' + e]
 }
@@ -22,7 +20,6 @@ HTTP.metaClass.'static'.getDEFAULT_CHARSET = { -> 'UTF-8' }
 // set apikey
 def HEADERS = [apikey: "oh-my-tlb"];
 
-// 
 
 // get badgeNumber
 String badgeNumber = follower?.badgeNumber;

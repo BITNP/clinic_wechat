@@ -19,9 +19,7 @@ class ApiController {
 def API_HOST = "";
 try{
     API_HOST =  request.getHeader('url');
-    if(!API_HOST){
-        return ['errcode': 'header[url] is empty. ']
-    }
+    API_HOST = 'http://localhost:8000' + API_HOST
 } catch(e){
     return ['errcode': 'header[url] get error: ' + e]
 }
