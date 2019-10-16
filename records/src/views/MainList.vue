@@ -48,12 +48,16 @@
       </template>
     </div>
 
-
-    <div class="page-footer">
-      <Box
-        gap="10px 10px"
-        v-if="all_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0"
-      >
+    <div v-if="all_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0">
+      <Box gap="10px 10px">
+        <x-button></x-button>
+      </Box>
+    </div>
+    <div
+      class="page-footer"
+      v-if="all_records.filter(v=>WORKING_STATUS.includes(v.status)).length == 0"
+    >
+      <Box gap="10px 10px">
         <x-button style=";" type="primary" action-type="button" link="/new">新建工单</x-button>
       </Box>
     </div>
