@@ -12,13 +12,13 @@
     <box gap="10px 10px">
       <x-button type="primary" @click.native="submit">提交</x-button>
     </box>
-    <TOC v-model="toc" @toggle-toc="toc = false" />
+    <TOS v-model="toc" @toggle-toc="toc = false" />
   </div>
 </template>
 
 <script>
 import RecordForm from '@/components/RecordForm'
-import TOC from '@/components/TOC'
+import TOS from '@/components/TOS'
 import { XHeader, XButton, Toast, Box, CheckIcon } from 'vux'
 
 export default {
@@ -34,7 +34,7 @@ export default {
     Toast,
     Box,
     CheckIcon,
-    TOC
+    TOS
   },
   data: () => ({
     agree: false,
