@@ -106,5 +106,6 @@ try {
     }
 } catch (e) {
 
-    return ['errcode': 'query resend error\n' + e.getResponse() ]
+    response.status = e.response.statusCode
+    return JSON.parse(e.response.contentAsString)
 }

@@ -126,10 +126,11 @@ try {
     // println e.message
     //println e.getResponse().getContentAsString();
     // println "\n\n\n" 
-    println 'error'
+    // println 'error'
     // println 'data:' + data.getResponse().contentAsString
     // println 'error:' + e.message
-    return ['errcode': 'query resend error\n' + e.getMessage() ]
+    response.status = e.response.statusCode
+    return JSON.parse(e.response.contentAsString)
 }
         }
 
