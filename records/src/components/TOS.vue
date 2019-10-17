@@ -33,7 +33,7 @@ export default {
     toggle () {
       this.$emit('toggle-toc')
     },
-    getTOC () {
+    getTOS () {
       this.axios.get(`${this.Const}announcement/toc/`).then(({ data }) => {
         this.toc = data.content
       }).catch(e => {
@@ -43,10 +43,10 @@ export default {
     }
   },
   mounted () {
-    this.getTOC()
+    this.getTOS()
   },
   created () {
-    this.getTOC()
+    this.getTOS()
   }
 }
 </script>
