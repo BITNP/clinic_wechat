@@ -34,8 +34,6 @@ export default new Vuex.Store({
     getCampus (state) {
       Axios.get(`${Vue.prototype.Const}campus/`)
         .then(({ data }) => {
-          console.log(Vue.prototype.Const)
-          console.log(data)
           state.campus = data
         })
         .catch(e => {
@@ -64,7 +62,6 @@ export default new Vuex.Store({
             v.show = false
           })
           state.announcements = data
-          console.log(state.announcements)
         })
         .catch(e => {
           state.toast = newToast('无法获取公告信息')

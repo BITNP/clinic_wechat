@@ -65,30 +65,15 @@ export default {
           ...this.record
         })
         .then(({ data }) => {
-          console.log(typeof data)
-          if (
-            typeof data !== 'object' &&
-            data.includes('wslite.http.HTTPResponse')
-          ) {
-            this.$store.commit('popError', '提交失败！您已有工单或网络出现故障。')
-            return
-          }
           this.$router.push('/success')
         })
         .catch(({ response }) => {
           console.log(response)
           if (
             response &&
-            response.status === 400 &&
-            response.data &&
-            response.data[0] &&
-            response.data[0].includes('已超出')
+            response.data && typeof (response.data) === 'object'
           ) {
-            this.$store.commit('popError', '提交失败！已超出可提交工单数量')
-          } else if (
-            response && response.status === 400 && response.data && response.data.appointment_time
-          ) {
-            this.$store.commit('popError', '当前日期该位置诊所停止营业')
+            this.$store.commit('popError', response.data[Object.keys(response.data)[0]])
           } else {
             this.$store.commit('popError', 'Oops! 我们遇到了一些技术问题')
           }

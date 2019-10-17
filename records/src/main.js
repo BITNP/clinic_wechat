@@ -15,7 +15,6 @@ import VueAxios from 'vue-axios'
 import store from './store'
 
 Vue.use(VueAxios, axios)
-console.log(process.env)
 let BASE_URL = process.env.BASE_URL
 let PROXY_URL = process.env.PROXY_URL
 let USE_PROXY = process.env.USE_PROXY
