@@ -31,13 +31,13 @@ HTTP.metaClass.'static'.getDEFAULT_CHARSET = { -> 'UTF-8' }
 // 当然，也可以手动转码，但是这样不够优雅
 
 // set apikey
-def HEADERS = [apikey: "oh-my-tlb"];
+def HEADERS = ['X-API-KEY': "oh-my-tlb"];
 
 // 
 
 // get badgeNumber
 String badgeNumber = follower?.badgeNumber;
-badgeNumber = badgeNumber? badgeNumber : "电脑端";
+badgeNumber = badgeNumber? badgeNumber : "GUEST";
 
 if (!badgeNumber) {
     return ['errcode': 'badgeNumber initailize error. ' + follower.toString() + '; request-header[url]:' + API_HOST]

@@ -18,7 +18,7 @@ HTTP.metaClass.'static'.getDEFAULT_CHARSET = { -> 'UTF-8' }
 // 当然，也可以手动转码，但是这样不够优雅
 
 // set apikey
-def HEADERS = [apikey: "oh-my-tlb"];
+def HEADERS = ['X-API-KEY': "oh-my-tlb"];
 
 
 // get badgeNumber
