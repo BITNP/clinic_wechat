@@ -13,7 +13,6 @@
     <div style=";width:100%;">
       <tab></tab>
     </div>
-
     <div class="page-content">
       <TopAnnouncements></TopAnnouncements>
 
@@ -53,10 +52,7 @@
         <x-button></x-button>
       </Box>
     </div>
-    <div
-      class="page-footer"
-      v-if="hasOne"
-    >
+    <div class="page-footer" v-if="hasOne">
       <Box gap="10px 10px">
         <x-button type="primary" action-type="button" link="/new">新建工单</x-button>
       </Box>
@@ -152,7 +148,10 @@ export default {
       }
     },
     hasOne () {
-      return this.all_records.filter(v => this.WORKING_STATUS.includes(v.status)).length === 0
+      return (
+        this.all_records.filter(v => this.WORKING_STATUS.includes(v.status))
+          .length === 0
+      )
     }
   },
   methods: {
