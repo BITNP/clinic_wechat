@@ -69,6 +69,14 @@ axios.interceptors.request.use(function (config) {
   return Promise.reject(error)
 })
 
+console.info(
+  `
+  如果你能看到这段文字，那就说明你跟我们一样，是代码与情怀的追求者，
+  那就不妨加入我们，一起去探索更广阔的技术世界❤！
+  join@bitnp.net
+  `
+)
+
 // Add a response interceptor
 axios.interceptors.response.use(function (response) {
   // Do something with response data
