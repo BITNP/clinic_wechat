@@ -2,6 +2,7 @@ import wslite.rest.*
 import wslite.http.HTTP
 import grails.converters.JSON
 import groovy.json.JsonSlurper
+import java.security.MessageDigest
 
 def API_HOST = "";
 try{
@@ -17,8 +18,14 @@ try{
 HTTP.metaClass.'static'.getDEFAULT_CHARSET = { -> 'UTF-8' }
 // 当然，也可以手动转码，但是这样不够优雅
 
-// set apikey
-def HEADERS = ['X-API-KEY': "oh-my-tlb"];
+// define md5 function
+def generateMD5 = { String text ->
+    // define md5 function
+    MessageDigest md5 = MessageDigest.getInstance("MD5");
+    md5.update(text.getBytes());
+    return new BigInteger(1, md5.digest()).toString(16);
+}
+
 
 
 // get badgeNumber
@@ -28,6 +35,16 @@ badgeNumber = badgeNumber? badgeNumber : "GUEST";
 if (!badgeNumber) {
     return ['errcode': 'badgeNumber initailize error. ' + follower.toString() + '; request-header[url]:' + API_HOST]
 }
+
+
+// set apikey
+String apikey = "oh-my-tlb";
+
+apikey = generateMD5(apikey + badgeNumber)
+
+def HEADERS = ['X-API-KEY': apikey];
+
+
 
 // set query for backend authentication
 def QUERY = [username: badgeNumber];

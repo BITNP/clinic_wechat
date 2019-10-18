@@ -5,6 +5,7 @@ import wslite.http.HTTP
 import grails.converters.JSON
 import groovy.json.JsonSlurper
 import javax.servlet.http.HttpServletRequest
+import java.security.MessageDigest
 
 class ApiController {
 
@@ -12,6 +13,8 @@ class ApiController {
 
         // !mock data, will be deleted in production
         def follower = [badgeNumber:"1120171224"];
+
+
 
         def proxy =  { HttpServletRequest request->
             // 作为代理
@@ -30,14 +33,26 @@ try{
 HTTP.metaClass.'static'.getDEFAULT_CHARSET = { -> 'UTF-8' }
 // 当然，也可以手动转码，但是这样不够优雅
 
-// set apikey
-def HEADERS = ['X-API-KEY': "oh-my-tlb"];
-
-// 
+// define md5 function
+def generateMD5 = { String text ->
+    // define md5 function
+    MessageDigest md5 = MessageDigest.getInstance("MD5");
+    md5.update(text.getBytes());
+    return new BigInteger(1, md5.digest()).toString(16);
+}
 
 // get badgeNumber
 String badgeNumber = follower?.badgeNumber;
 badgeNumber = badgeNumber? badgeNumber : "GUEST";
+
+
+// set apikey
+String apikey = "oh-my-tlb";
+
+apikey = generateMD5(apikey + badgeNumber)
+
+def HEADERS = ['X-API-KEY': apikey];
+
 
 if (!badgeNumber) {
     return ['errcode': 'badgeNumber initailize error. ' + follower.toString() + '; request-header[url]:' + API_HOST]
