@@ -15,7 +15,6 @@ class ApiController {
         def follower = [badgeNumber:"1120171224"];
 
 
-
         def proxy =  { HttpServletRequest request->
             // 作为代理
             // 根据所选内容变化
@@ -49,7 +48,9 @@ badgeNumber = badgeNumber? badgeNumber : "GUEST";
 // set apikey
 String apikey = "oh-my-tlb";
 
-apikey = generateMD5(apikey + badgeNumber)
+String time = new Date().getTime().toString().substring(0, 9)
+
+apikey = generateMD5(apikey + badgeNumber + time)
 
 def HEADERS = ['X-API-KEY': apikey];
 
