@@ -41,9 +41,7 @@ if (!badgeNumber) {
 String apikey = "oh-my-tlb";
 String time = new Date().toString();
 apikey = generateMD5(apikey + badgeNumber + time)
-
-def HEADERS = ['X-API-KEY': apikey];
-
+def HEADERS = ['X-API-KEY': apikey, Date: time, 'X-Forwarded-For':request.getRemoteAddr()];
 
 
 // set query for backend authentication

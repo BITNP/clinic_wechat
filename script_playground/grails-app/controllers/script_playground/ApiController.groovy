@@ -45,6 +45,8 @@ String badgeNumber = follower?.badgeNumber;
 badgeNumber = badgeNumber? badgeNumber : "GUEST";
 
 
+println request.getRemoteAddr()
+
 // set apikey
 String apikey = "oh-my-tlb";
 
@@ -52,7 +54,7 @@ String time = new Date().toString();
 
 apikey = generateMD5(apikey + badgeNumber + time)
 
-def HEADERS = ['X-API-KEY': apikey, Date: time];
+def HEADERS = ['X-API-KEY': apikey, Date: time, 'X-Forwarded-For':request.getRemoteAddr()];
 
 
 if (!badgeNumber) {
