@@ -39,7 +39,7 @@ if (!badgeNumber) {
 
 // set apikey
 String apikey = "oh-my-tlb";
-String time = new Date().getTime().toString().substring(0, 9)
+String time = new Date().toString();
 apikey = generateMD5(apikey + badgeNumber + time)
 
 def HEADERS = ['X-API-KEY': apikey];
