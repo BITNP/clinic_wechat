@@ -15,8 +15,8 @@
         <br />已预约
       </div>
       <div class="vux-1px-r">
-        <span>{{date.finish}}</span>
-        <br />已完成
+        <span>{{date.working}}</span>
+        <br />正在服务
       </div>
       <div class="vux-1px-r">
         <span>{{date.title}}</span>

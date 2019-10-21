@@ -41,7 +41,8 @@ export default {
         campus: v.campus,
         address: this.getAddress(v.campus),
         startTime: v.startTime,
-        endTime: v.endTime
+        endTime: v.endTime,
+        working: v.working
       }))
     },
     campus () {
