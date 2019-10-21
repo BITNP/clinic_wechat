@@ -7,6 +7,7 @@
 
       <DatePreview :date="date" :key="idx"></DatePreview>
       </template>
+    <br />
     <template v-for="(c, idx) in campus">
       <flexbox v-if="dates.filter(v=>v.campus===c.name).length===0" :key="idx">
         <flexbox-item>
