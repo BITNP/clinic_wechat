@@ -3,10 +3,9 @@
     <inline-calendar ref="calendar" v-model="value" :disable-date-function="validDate"></inline-calendar>
     <br />
 
-       <template v-for="(date, idx) in datesSelected">
-
+    <template v-for="(date, idx) in datesSelected">
       <DatePreview :date="date" :key="idx"></DatePreview>
-      </template>
+    </template>
     <br />
     <template v-for="(c, idx) in campus">
       <flexbox v-if="dates.filter(v=>v.campus===c.name).length===0" :key="idx">
