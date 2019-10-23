@@ -1,7 +1,6 @@
 <template>
   <div>
     <group title="必填项">
-      <!--  :readonly="!!record.appointment_time" -->
       <selector
         title="校区"
         required
@@ -18,12 +17,13 @@
         :disable-date-function="validDate"
         placeholder="请选择一个日期，可选表示正常营业"
       ></calendar>
+      <cell v-if="selectedDate" title="服务时间" inline-desc="请仔细查看诊所日历获取相应信息" :value="selectedDate?`${selectedDate.startTime} - ${selectedDate.endTime}`:''"></cell>
       <x-textarea
         title="问题描述"
         placeholder="请尽可能详细地描述您所遇到的问题"
         required
         :max="600"
-        v-model="record.description"
+        inline-desc="时间"
       ></x-textarea>
     </group>
     <group title="选填项，这将有助于我们提供更好的服务">
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { Group, Calendar, XInput, Selector, XTextarea } from 'vux'
+import { Group, Calendar, XInput, Selector, XTextarea, Cell } from 'vux'
 
 export default {
   components: {
@@ -51,7 +51,8 @@ export default {
     Calendar,
     XInput,
     Selector,
-    XTextarea
+    XTextarea,
+    Cell
   },
   props: ['record', 'create'],
   data: () => ({}),
@@ -76,6 +77,10 @@ export default {
         .filter(v => v.campus === this.record.campus)
         .filter(v => v.capacity > v.count)
         .map(date => date.date)
+    },
+    selectedDate () {
+      let dates = this.$store.state.dates
+      return dates.filter(v => v.campus === this.record.campus && v.date === this.record.appointment_time)[0]
     }
   }
 }
