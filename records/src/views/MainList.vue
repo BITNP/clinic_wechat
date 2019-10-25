@@ -16,7 +16,7 @@
     <div class="page-content">
       <TopAnnouncements></TopAnnouncements>
 
-      <template v-if="[1,2].includes(tabNum)">
+      <template v-if="[2,3].includes(tabNum)">
         <template v-for="(d,index) in filtered_records">
           <RecordPreview :key="index" :record="d" @edit-current-record="popup([d,index])"></RecordPreview>
         </template>
@@ -37,7 +37,7 @@
           </popup>
         </div>
       </template>
-      <template v-else-if="tabNum == 3">
+      <template v-else-if="tabNum == 0">
         <Announcements></Announcements>
         <Footer></Footer>
       </template>
@@ -112,7 +112,7 @@ export default {
     Footer
   },
   data: () => ({
-    tabTitles: ['诊所服务日历', '正在处理', '已处理', '公告'],
+    tabTitles: [ '公告', '诊所服务日历', '正在处理', '已处理' ],
     tabNum: 0,
     display_new_form: false,
     scroll: false,
@@ -137,7 +137,7 @@ export default {
   }),
   computed: {
     filtered_records () {
-      if (this.tabNum === 1) {
+      if (this.tabNum === 2) {
         return this.all_records.filter(r =>
           this.WORKING_STATUS.includes(r.status)
         )
