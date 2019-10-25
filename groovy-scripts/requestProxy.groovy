@@ -4,10 +4,18 @@ import grails.converters.JSON
 import groovy.json.JsonSlurper
 import java.security.MessageDigest
 
-def API_HOST = "";
+def URL = "";
+String HOST = 'https://clinic.bitnp.net'
+String HOST_MASK = 'https://example.org'
 try{
-    API_HOST =  request.getHeader('url');
-    API_HOST = 'https://clinic.bitnp.net' + API_HOST
+    URL =  request.getHeader('url');
+    if(URL.startsWith('http')){
+        // absolute url
+        URL = URL.replace(HOST_MASK, HOST)
+    } else {
+        // relative url
+        URL = HOST + URL
+    }
 } catch(e){
     return ['errcode': 'header[url] get error: ' + e]
 }
@@ -33,7 +41,7 @@ String badgeNumber = follower?.badgeNumber;
 badgeNumber = badgeNumber? badgeNumber : "GUEST";
 
 if (!badgeNumber) {
-    return ['errcode': 'badgeNumber initailize error. ' + follower.toString() + '; request-header[url]:' + API_HOST]
+    return ['errcode': 'badgeNumber initailize error. ' + follower.toString() + '; request-header[url]:' + URL]
 }
 
 
@@ -54,13 +62,14 @@ if (!requestMethod){
     return ['errcode':'mothod empty.' + e]
 }
 
-def client = new RESTClient(API_HOST);
+def client = new RESTClient(URL);
 client.httpClient.sslTrustAllCerts = true;
 
 // def a =  client.httpClient.request.headers.'Content-Type'
 // println a
 
 def data = [:];
+def content = "";
 try {
     if (requestMethod == "POST"){
 
@@ -114,13 +123,17 @@ try {
         return requestMethod
     }
     if(!data?.contentAsString.isEmpty()) {
-	    return  JSON.parse(data?.contentAsString)
+        content = data?.contentAsString
     }
     else{ 
-        return JSON.parse('{}')
+        content = '{}'
     }
 } catch (e) {
-
-    response.status = e.response.statusCode
-    return JSON.parse(e.response.contentAsString)
+    if(e && e.response){
+        response.status = e.response.statusCode
+        content = e.response.contentAsString
+    }
 }
+
+content = content.replace(HOST,HOST_MASK)
+return JSON.parse(content)

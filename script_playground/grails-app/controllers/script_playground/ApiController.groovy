@@ -18,10 +18,18 @@ class ApiController {
         def proxy =  { HttpServletRequest request->
             // 作为代理
             // 根据所选内容变化
-def API_HOST = "";
+String HOST = 'http://localhost:8000'
+String HOST_MASK = 'http://example.org'
+def URL = "";
 try{
-    API_HOST =  request.getHeader('url');
-    API_HOST = 'http://localhost:8000' + API_HOST
+    URL =  request.getHeader('url');
+    if(URL.startsWith('http')){
+        // absolute url
+        URL = URL.replace(HOST_MASK, HOST)
+    } else {
+        // relative url
+        URL = HOST + URL
+    }
 } catch(e){
     return ['errcode': 'header[url] get error: ' + e]
 }
@@ -45,7 +53,7 @@ String badgeNumber = follower?.badgeNumber;
 badgeNumber = badgeNumber? badgeNumber : "GUEST";
 
 
-println request.getRemoteAddr()
+// println request.getRemoteAddr()
 
 // set apikey
 String apikey = "oh-my-tlb";
@@ -58,7 +66,7 @@ def HEADERS = ['X-API-KEY': apikey, Date: time, 'X-Forwarded-For':request.getRem
 
 
 if (!badgeNumber) {
-    return ['errcode': 'badgeNumber initailize error. ' + follower.toString() + '; request-header[url]:' + API_HOST]
+    return ['errcode': 'badgeNumber initailize error. ' + follower.toString() + '; request-header[url]:' + URL]
 }
 
 // set query for backend authentication
@@ -71,15 +79,16 @@ if (!requestMethod){
     return ['errcode':'mothod empty.' + e]
 }
 
-def client = new RESTClient(API_HOST);
+def client = new RESTClient(URL);
 client.httpClient.sslTrustAllCerts = true;
 client.defaultCharset = 'UTF-8'
 
-println '[sendto]' + API_HOST
+println '[sendto]' + URL
 // def a =  client.httpClient.request.headers.'Content-Type'
 // println a
 
-    def data = [:];
+def data = [:];
+def content = "";
 try {
 
     if (requestMethod == "POST"){
@@ -131,13 +140,14 @@ try {
                 body: params
                 )
     } else {
+        // never get in here.
         return requestMethod
     }
     if(!data?.contentAsString.isEmpty()) {
-	    return  JSON.parse(data?.contentAsString)
+        content = data?.contentAsString
     }
     else{ 
-        return JSON.parse('{}')
+        content = '{}'
     }
 } catch (e) {
     // println "\n\n\n"
@@ -147,15 +157,19 @@ try {
     // println 'error'
     // println 'data:' + data.getResponse().contentAsString
     // println 'error:' + e.message
-    response.status = e.response.statusCode
-    return JSON.parse(e.response.contentAsString)
+    if(e && e.response){
+        response.status = e.response.statusCode
+        content = e.response.contentAsString
+    }
 }
-        }
+content = content.replace(HOST,HOST_MASK)
+// println content
+return JSON.parse(content)
+}
 
 
 
         def res = proxy(request);
-        println(res)
         render  res as JSON
     }
 }
