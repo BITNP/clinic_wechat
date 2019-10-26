@@ -9,12 +9,15 @@ String HOST = 'https://clinic.bitnp.net'
 String HOST_MASK = 'https://example.org'
 try{
     URL =  request.getHeader('url');
-    if(URL.startsWith('http')){
+    if(URL.startsWith(HOST_MASK)){
         // absolute url
         URL = URL.replace(HOST_MASK, HOST)
-    } else {
+    } else if (!URL.startsWith('http')) {
         // relative url
         URL = HOST + URL
+    } else {
+        // malicious url
+        return ['errcode':"reject."]
     }
 } catch(e){
     return ['errcode': 'header[url] get error: ' + e]
