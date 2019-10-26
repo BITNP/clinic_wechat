@@ -4,7 +4,7 @@
     <br />
     <div v-transfer-dom>
       <popup v-model="showpopup" position="right" width="100%">
-        <box gap="10px 10px">
+        <box gap="10px 10px" style="z-index:999;">
           <group >
             <cell class="cell-grey" title="标题" :value="selectedItem.title"></cell >
             <cell class="cell-grey" title="公告类型" :value="selectedItem.tag"></cell >
@@ -14,7 +14,7 @@
             <vue-markdown :show="selectedItem.content.length>0" :source="selectedItem.content"></vue-markdown>
           </div>
 
-          <div class="position-horizontal-demo">
+          <div class="confirm-btn">
             <x-button plain @click.native="showpopup = false" type="primary">确认</x-button>
           </div>
         </box>
@@ -126,6 +126,8 @@ export default {
 
 .card-padding {
   padding: 15px;
-  margin: 30px;
+}
+.confirm-btn{
+  margin: 50px 0;
 }
 </style>

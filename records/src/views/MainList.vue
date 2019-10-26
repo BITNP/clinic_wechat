@@ -224,7 +224,7 @@ body {
   left: 0px;
   top: 0px;
   width: 100%;
-  z-index: 2;
+  z-index: 10;
 }
 .page-content {
   margin-bottom: 42px;
@@ -235,6 +235,6 @@ body {
   bottom: 0px;
   width: 100%;
   background-color: #fff;
-  z-index: 999;
+  z-index: 10;
 }
 </style>
