@@ -21,6 +21,7 @@
       <x-textarea
         title="问题描述"
         placeholder="请尽可能详细地描述您所遇到的问题"
+        v-model="record.description"
         required
         :max="600"
         inline-desc="时间"
