@@ -24,7 +24,6 @@
         v-model="record.description"
         required
         :max="600"
-        inline-desc="时间"
       ></x-textarea>
     </group>
     <group title="选填项，这将有助于我们提供更好的服务">
