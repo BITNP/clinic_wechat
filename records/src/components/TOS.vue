@@ -37,13 +37,12 @@ export default {
       this.axios.get(`${this.Const}announcement/toc/`).then(({ data }) => {
         this.toc = data.content
       }).catch(e => {
-        console.error(e)
         this.$store.commit('popError', '无法获取免责声明')
       })
     }
   },
   mounted () {
-    this.getTOS()
+    // this.getTOS()
   },
   created () {
     this.getTOS()

@@ -5,11 +5,9 @@ import FastClick from 'fastclick'
 import VueRouter from 'vue-router'
 import App from './App'
 import Home from '@/views/MainList'
-import Record from '@/views/NewRecord'
-import Success from '@/views/Success'
-import {
-  TransferDom
-} from 'vux'
+// import Record from '@/views/NewRecord'
+// import Success from '@/views/Success'
+import { TransferDom } from 'vux'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import store from './store'
@@ -20,54 +18,57 @@ let PROXY_URL = process.env.PROXY_URL
 let USE_PROXY = process.env.USE_PROXY
 
 // Add a request interceptor
-axios.interceptors.request.use(function (config) {
-  if (USE_PROXY) {
-    // save real url in headers[url]
-    if (config.headers) {
-      config.headers['url'] = config.url
-    } else {
-      config.headers = {
-        url: config.url
+axios.interceptors.request.use(
+  function (config) {
+    if (USE_PROXY) {
+      // save real url in headers[url]
+      if (config.headers) {
+        config.headers['url'] = config.url
+      } else {
+        config.headers = {
+          url: config.url
+        }
       }
-    }
-    // substitude url with groovy proxy url
-    config.url = PROXY_URL
-    config.params = {
-      script: 'requestProxy.groovy'
-    }
-
-    // set script name
-    if (config && config.data) {
-      config.data.script = 'requestProxy.groovy'
-    } else {
-      config.data = {
+      // substitude url with groovy proxy url
+      config.url = PROXY_URL
+      config.params = {
         script: 'requestProxy.groovy'
       }
-    }
-  } else {
-    // 本机开发，不使用groovy proxy
-    // inject api and user name
-    config.headers = {
-      apikey: 'oh-my-tlb'
-    }
-    config.params = {
-      username: 'FKY'
-    }
 
-    if (config && config.data) {
-      config.data.user = 'FKY'
+      // set script name
+      if (config && config.data) {
+        config.data.script = 'requestProxy.groovy'
+      } else {
+        config.data = {
+          script: 'requestProxy.groovy'
+        }
+      }
     } else {
-      config.data = {
-        user: 'FKY'
+      // 本机开发，不使用groovy proxy
+      // inject api and user name
+      config.headers = {
+        apikey: 'oh-my-tlb'
+      }
+      config.params = {
+        username: 'FKY'
+      }
+
+      if (config && config.data) {
+        config.data.user = 'FKY'
+      } else {
+        config.data = {
+          user: 'FKY'
+        }
       }
     }
-  }
 
-  return config
-}, function (error) {
-  // Do something with request error
-  return Promise.reject(error)
-})
+    return config
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error)
+  }
+)
 
 console.info(
   `
@@ -78,20 +79,24 @@ console.info(
 )
 
 // Add a response interceptor
-axios.interceptors.response.use(function (response) {
-  // Do something with response data
-  return response
-}, function (error) {
-  // Do something with response error
-  if (error.response && error.response.data) {
-    console.log(error.response.data)
-  } else if (error.response) {
-    console.log(error.response)
-  } else {
-    console.log(error)
+axios.interceptors.response.use(
+  function (response) {
+    // Do something with response data
+    return response
+  },
+  function (error) {
+    // Do something with response error
+    store.commit('popError', '无法获取数据')
+    if (error.response && error.response.data) {
+      console.log(error.response.data)
+    } else if (error.response) {
+      console.log(error.response)
+    } else {
+      console.log(error)
+    }
+    return Promise.reject(error)
   }
-  return Promise.reject(error)
-})
+)
 
 Vue.directive('transfer-dom', TransferDom)
 // import VueI18n from 'vue-i18n'
@@ -102,20 +107,50 @@ Vue.directive('transfer-dom', TransferDom)
 // ======================= Vue Router =========================
 Vue.use(VueRouter)
 
-const routes = [{
-  path: '/',
-  name: 'home',
-  component: Home
-}, {
-  path: '/new',
-  name: 'record',
-  component: Record
-},
-{
-  path: '/success',
-  name: 'success',
-  component: Success
-}
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: Home,
+    children: [
+      {
+        path: 'calendar',
+        name: 'calendar',
+        component: () =>
+          import(/* webpackChunkName: "calendar" */ './views/Calendar.vue')
+      },
+      {
+        path: '',
+        name: 'announcements',
+        component: () =>
+          import(/* webpackChunkName: "announcements" */ './views/Announcements.vue')
+      },
+      {
+        path: 'working',
+        name: 'working',
+        component: () =>
+          import(/* webpackChunkName: "working" */ './views/WorkingRecord.vue')
+      },
+      {
+        path: 'finish',
+        name: 'finish',
+        component: () =>
+          import(/* webpackChunkName: "finish" */ './views/FinishedRecords.vue')
+      }
+    ]
+  },
+  {
+    path: '/new/',
+    name: 'record',
+    component: () =>
+      import(/* webpackChunkName: "record" */ './views/NewRecord.vue')
+  },
+  {
+    path: '/success/',
+    name: 'success',
+    component: () =>
+      import(/* webpackChunkName: "success" */ './views/Success.vue')
+  }
 ]
 
 const router = new VueRouter({

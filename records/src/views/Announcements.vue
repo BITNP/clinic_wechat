@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { Card, XButton, Cell, Group, Panel, Popup, Box } from 'vux'
+import { XButton, Cell, Group, Panel, Popup, Box } from 'vux'
 import VueMarkdown from 'vue-markdown'
 
 let cmpHelper = function (attrName, less = false) {
@@ -49,7 +49,6 @@ let cmpHelper = function (attrName, less = false) {
 
 export default {
   components: {
-    Card,
     XButton,
     Cell,
     Group,
@@ -63,41 +62,41 @@ export default {
       content: ''
     },
     showpopup: false,
-    announcements_order: '优先级',
+    // announcements_order: '优先级',
     ANNOUNCEMENTS_MAP: {
       TOS: '免责声明',
       AN: '普通公告',
       TA: '置顶公告'
-    },
-    ANNOUNCEMENTS_ORDER_OPTIONS: [
-      '优先级',
-      '最新创建',
-      '最早创建',
-      '最新修改',
-      '最早修改',
-      '最晚过期',
-      '最早过期'
-    ]
+    }
+    // ANNOUNCEMENTS_ORDER_OPTIONS: [
+    //   '优先级',
+    //   '最新创建',
+    //   '最早创建',
+    //   '最新修改',
+    //   '最早修改',
+    //   '最晚过期',
+    //   '最早过期'
+    // ]
   }),
   computed: {
     ordered_announcements () {
-      let sortby
-      if (this.announcements_order === '优先级') {
-        sortby = cmpHelper('priority', true)
-      } else if (this.announcements_order === '最新创建') {
-        sortby = cmpHelper('createdTime')
-      } else if (this.announcements_order === '最早创建') {
-        sortby = cmpHelper('createdTime', true)
-      } else if (this.announcements_order === '最新修改') {
-        sortby = cmpHelper('lastEditedTime')
-      } else if (this.announcements_order === '最早修改') {
-        sortby = cmpHelper('lastEditedTime', true)
-      } else if (this.announcements_order === '最晚过期') {
-        sortby = cmpHelper('expireTime')
-      } else {
-        // 最早过期
-        sortby = cmpHelper('expireTime', true)
-      }
+      let sortby = cmpHelper('priority', true)
+      // if (this.announcements_order === '优先级') {
+      //   sortby
+      // } else if (this.announcements_order === '最新创建') {
+      //   sortby = cmpHelper('createdTime')
+      // } else if (this.announcements_order === '最早创建') {
+      //   sortby = cmpHelper('createdTime', true)
+      // } else if (this.announcements_order === '最新修改') {
+      //   sortby = cmpHelper('lastEditedTime')
+      // } else if (this.announcements_order === '最早修改') {
+      //   sortby = cmpHelper('lastEditedTime', true)
+      // } else if (this.announcements_order === '最晚过期') {
+      //   sortby = cmpHelper('expireTime')
+      // } else {
+      //   // 最早过期
+      //   sortby = cmpHelper('expireTime', true)
+      // }
       let announcements = this.$store.state.announcements
       announcements = announcements.map(v => ({
         title: v.title,
@@ -114,6 +113,9 @@ export default {
       this.showpopup = true
       this.selectedItem = item
     }
+  },
+  created () {
+    this.$store.commit('initAnnouncements')
   }
 }
 </script>
