@@ -22,7 +22,8 @@ export default new Vuex.Store({
     },
     campus: [],
     dates: [],
-    announcements: []
+    announcements: [],
+    workingRecord: undefined
   },
   mutations: {
     popSuccess (state, text = '操作成功') {
@@ -36,10 +37,6 @@ export default new Vuex.Store({
         .then(({ data }) => {
           state.campus = data
         })
-        .catch(e => {
-          console.error(e)
-          state.toast = newToast('无法获取数据')
-        })
     },
     getDates (state) {
       Axios.get(Vue.prototype.Const + 'date/').then(({ data }) => {
@@ -48,9 +45,6 @@ export default new Vuex.Store({
           data = []
         }
         state.dates = data
-      }).catch(e => {
-        console.error(e)
-        state.toast = newToast('无法获取数据')
       })
     },
     initAnnouncements (state) {
@@ -66,6 +60,18 @@ export default new Vuex.Store({
         .catch(e => {
           state.toast = newToast('无法获取公告信息')
         })
+    },
+    getWorkingRecord (state) {
+      Axios.get(`${Vue.prototype.Const}wechat/working/`)
+      .then(({ data }) => {
+        if (data && data.count === 1) {
+          // 有
+          state.workingRecord = data.data
+        } else {
+          // 没有
+          state.workingRecord = null
+        }
+      })
     }
   },
   actions: {},

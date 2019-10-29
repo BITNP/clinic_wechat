@@ -28,6 +28,7 @@ export default {
   created () {
     this.$store.commit('getCampus')
     this.$store.commit('getDates')
+    this.$store.commit('getWorkingRecord')
   }
 }
 </script>

@@ -35,14 +35,11 @@
 <script>
 import {
   Card,
-  Group,
   XButton,
-  Confirm,
-  XDialog,
+  // XDialog,
   Flexbox,
   FlexboxItem,
   PopupHeader,
-  Toast,
   Box
 } from 'vux'
 
@@ -51,15 +48,12 @@ import RecordFrom from './RecordForm'
 export default {
   components: {
     Card,
-    Group,
     XButton,
-    Confirm,
-    XDialog,
+    // XDialog,
     Flexbox,
     FlexboxItem,
     PopupHeader,
     RecordFrom,
-    Toast,
     Box
   },
   data: () => ({
@@ -80,10 +74,7 @@ export default {
               title: '已成功删除工单'
             }
           })
-        })
-        .catch(e => {
-          console.error(e)
-          this.$store.commit('popError')
+          this.$store.commit('getWorkingRecord')
         })
     },
     update () {
@@ -100,7 +91,6 @@ export default {
           this.$store.commit('popSuccess', '更新成功')
         })
         .catch((e) => {
-          console.error(e)
           this.$store.commit('popError', 'Oops! 我们遇到了一些技术问题')
         })
     },

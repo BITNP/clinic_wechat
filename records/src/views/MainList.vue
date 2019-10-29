@@ -5,9 +5,9 @@
         <tab-item
           v-for="(tabTitle, index) in tabTitles"
           :key="index"
-          @on-item-click="tabNum = index; display = false"
+          @on-item-click="switchTab"
           :selected="index == tabNum"
-        >{{tabTitle}}</tab-item>
+        >{{tabTitle.title}}</tab-item>
       </tab>
     </div>
     <div style=";width:100%;">
@@ -15,8 +15,8 @@
     </div>
     <div class="page-content">
       <TopAnnouncements></TopAnnouncements>
-
-      <template v-if="[2,3].includes(tabNum)">
+      <router-view></router-view>
+      <!-- <template v-if="[2,3].includes(tabNum)">
         <template v-for="(d,index) in filtered_records">
           <RecordPreview :key="index" :record="d" @edit-current-record="popup([d,index])"></RecordPreview>
         </template>
@@ -42,17 +42,18 @@
         <Footer></Footer>
       </template>
       <template v-else>
-        <Calendar :dates="dates" />
+        <Calendar />
         <Footer />
-      </template>
+      </template>-->
+      <Footer />
     </div>
 
-    <div v-if="hasOne">
+    <div v-if="!hasOne">
       <Box gap="10px 10px">
         <x-button></x-button>
       </Box>
     </div>
-    <div class="page-footer" v-if="hasOne">
+    <div class="page-footer" v-if="!hasOne">
       <Box gap="10px 10px">
         <x-button type="primary" action-type="button" link="/new">新建工单</x-button>
       </Box>
@@ -62,141 +63,101 @@
 
 <script>
 import {
-  Popup,
-  FormPreview,
   Tab,
   TabItem,
-  XHeader,
   Card,
   XButton,
-  Divider,
-  Box,
-  Cell,
-  Group,
-  PopupRadio,
-  Flow,
-  FlowState,
-  FlowLine
+  Box
 } from 'vux'
-import InfiniteLoading from 'vue-infinite-loading'
-import Popupcontent from '@/components/PopupContent'
-import Calendar from '@/components/Calendar'
-import RecordPreview from '@/components/RecordPreview'
-import Announcements from '@/components/Announcements'
+// import Calendar from '@/components/Calendar'
+// import RecordPreview from '@/components/RecordPreview'
+// import Announcements from '@/components/Announcements'
 import TopAnnouncements from '@/components/TopAnnouncements'
 import Footer from '@/components/Footer'
 
 export default {
   components: {
-    FormPreview,
     Tab,
     TabItem,
-    XHeader,
     Card,
-    Popup,
-    Popupcontent,
     XButton,
-    Divider,
-    InfiniteLoading,
     Box,
-    Cell,
-    Group,
-    Calendar,
-    PopupRadio,
-    Flow,
-    FlowState,
-    FlowLine,
-    RecordPreview,
-    Announcements,
     TopAnnouncements,
     Footer
   },
   data: () => ({
-    tabTitles: [ '公告', '诊所服务日历', '正在处理', '已处理' ],
+    tabTitles: [
+      { title: '公告', to: {name: 'announcements'} },
+      { title: '诊所服务日历', to: {name: 'calendar'} },
+      { title: '正在处理', to: {name: 'working'} },
+      { title: '已处理', to: {name: 'finish'} }
+    ],
     tabNum: 0,
-    display_new_form: false,
-    scroll: false,
+    // display_new_form: false,
+    // scroll: false,
     display: false,
-    dates: [],
-    next: '',
-    touch: {
-      x: -1
-    },
+    // next: '',
+    // touch: {
+    //   x: -1
+    // },
     record: {
       campus: '',
       appointment_time: new Date().toISOString().substr(0, 10)
-    },
-    record_index: -1,
-    all_records: [],
-    WORKING_STATUS: [0, 1, 2, 4, 5],
-    FINISHED_STATUS: [3, 6, 7, 8],
-    CAMPUS_MAP: {
-      LX: '良乡',
-      ZGC: '中关村'
     }
+    // record_index: -1
   }),
   computed: {
-    filtered_records () {
-      if (this.tabNum === 2) {
-        return this.all_records.filter(r =>
-          this.WORKING_STATUS.includes(r.status)
-        )
-      } else {
-        return this.all_records.filter(
-          r => !this.WORKING_STATUS.includes(r.status)
-        )
-      }
-    },
     hasOne () {
-      return (
-        this.all_records.filter(v => this.WORKING_STATUS.includes(v.status))
-          .length === 0
-      )
+      return this.working_record === null
     }
   },
   methods: {
-    popup (name) {
-      this.display = !this.display
-      this.record = name[0]
-      this.record_index = name[1]
-    },
-    loadMore ($state) {
-      if ($state && !this.next) {
-        $state.complete()
+    // popup (name) {
+    //   this.display = !this.display
+    //   this.record = name[0]
+    //   this.record_index = name[1]
+    // },
+    // loadMore ($state) {
+    //   if ($state && !this.next) {
+    //     $state.complete()
+    //     return
+    //   }
+    //   this.$http
+    //     .get(this.next)
+    //     .then(({ data }) => {
+    //       if (typeof data === 'string') {
+    //         // 如果返回了string，表示服务端可能出现错误
+    //         this.$store.commit('popError', 'Oops! 我们的服务器出现了一些问题')
+    //         return
+    //       }
+    //       this.all_records = this.all_records.concat(data.results)
+    //       this.next = data.next
+    //       if ($state && this.next) {
+    //         $state.loaded()
+    //       } else if ($state) {
+    //         $state.complete()
+    //       }
+    //     })
+    //     .catch(e => {
+    //       console.log(e)
+    //       this.$store.commit('popError', '无法获取数据')
+    //     })
+    // },
+    // initRecords () {
+    //   this.next = this.Const + 'wechat/'
+    // },
+    switchTab (index) {
+      if (this.tabNum === index) {
+        // 当前页面
         return
       }
-      this.$http
-        .get(this.next)
-        .then(({ data }) => {
-          if (typeof data === 'string') {
-            // 如果返回了string，表示服务端可能出现错误
-            this.$store.commit('popError', 'Oops! 我们的服务器出现了一些问题')
-            return
-          }
-          this.all_records = this.all_records.concat(data.results)
-          this.next = data.next
-          if ($state && this.next) {
-            $state.loaded()
-          } else if ($state) {
-            $state.complete()
-          }
-        })
-        .catch(e => {
-          console.log(e)
-          this.$store.commit('popError', '无法获取数据')
-        })
-    },
-    initRecords () {
-      this.next = this.Const + 'wechat/'
+      this.tabNum = index
+      this.$router.push(this.tabTitles[index].to, () => {})
     }
   },
   created () {
-    // 放到Store里，还可以进行性能优化
-    this.initRecords()
-    // 初始化的时候就调用一次，因为需要知道当前有没有已经创建工单
-    // 更好的方式是从后台返回数据
-    this.loadMore()
-    this.$store.commit('initAnnouncements')
+    let name = this.$route.name
+    this.tabNum = this.tabTitles.map(v => v.to.name).indexOf(name)
   },
   mounted () {
     this.record.campus = '良乡校区'

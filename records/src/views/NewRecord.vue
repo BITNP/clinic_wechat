@@ -68,7 +68,6 @@ export default {
           this.$router.push('/success')
         })
         .catch(({ response }) => {
-          console.log(response)
           if (
             response &&
             response.data && typeof (response.data) === 'object'
