@@ -9,20 +9,24 @@
       :text="toast.text"
       :position="toast.position"
     ></toast>
+    <loading :show="loading" text="正在努力加载"></loading>
   </div>
 </template>
 
 <script>
-import { Toast } from 'vux'
+import { Toast, Loading } from 'vux'
 
 export default {
   name: 'app',
   components: {
-    Toast
+    Toast, Loading
   },
   computed: {
     toast () {
       return this.$store.state.toast
+    },
+    loading () {
+      return this.$store.state.loading
     }
   },
   created () {

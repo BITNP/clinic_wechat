@@ -20,6 +20,7 @@ export default new Vuex.Store({
       text: '',
       position: ''
     },
+    loading: true,
     campus: [],
     dates: [],
     announcements: [],
@@ -72,6 +73,12 @@ export default new Vuex.Store({
           state.workingRecord = null
         }
       })
+    },
+    loading (state) {
+      state.loading = true
+    },
+    loaded (state) {
+      state.loading = false
     }
   },
   actions: {},
