@@ -157,6 +157,15 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach(function (to, from, next) {
+  store.commit('loading')
+  next()
+})
+
+router.afterEach(function (to) {
+  store.commit('loaded')
+})
+
 FastClick.attach(document.body)
 
 Vue.config.productionTip = false
