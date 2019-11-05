@@ -115,7 +115,7 @@ try {
                 type ContentType.JSON
                 json request.JSON
                 }
-    } else if (requestMethod == "OPTION"){
+    } else if (requestMethod == "OPTIONS"){
         data = client.option(
                 headers: HEADERS,
                 query: QUERY,
@@ -123,7 +123,7 @@ try {
                 body: params
                 )
     } else {
-        return requestMethod
+        return ['errorcode':requestMethod]
     }
     if(!data?.contentAsString.isEmpty()) {
         content = data?.contentAsString
