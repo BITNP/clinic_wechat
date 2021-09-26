@@ -15,6 +15,9 @@
 
 <script>
 import { Toast, Loading } from 'vux'
+import * as dd from 'dingtalk-jsapi'
+import axios from 'axios'
+import store from './store'
 
 export default {
   name: 'app',
@@ -29,11 +32,57 @@ export default {
       return this.$store.state.loading
     }
   },
-  created () {
+  async created () {
+    let USER_URL = process.env.USER_URL
+    await (() => {
+      return new Promise(async (resolve, reject) => {
+        if (!store.state.loggedin) {
+          const response = await axios.get(USER_URL)
+          if (response.data.status === 200) {
+            store.state.loggedin = true
+            resolve()
+          } else if (response.data.status === 403) {
+            dd.ready(() => {
+              dd.runtime.permission.requestAuthCode({
+                corpId: findGetParameter('corpId'),
+                onSuccess: async (info) => {
+                  localStorage.setItem('user-token', info.code)
+                  const response2 = await axios.post(USER_URL)
+                  if (response2.data.status !== 200) {
+                    console.log('oops!! login failed ' + response2.data.status)
+                    reject(Error('login failed'))
+                  } else {
+                    resolve()
+                    console.log('!!resolve!!')
+                  }
+                }
+              })
+            })
+          }
+        } else {
+          resolve()
+        }
+      })
+    })()
     this.$store.commit('getCampus')
     this.$store.commit('getDates')
     this.$store.commit('getWorkingRecord')
+
+    this.$store.commit('initAnnouncements')
   }
+}
+
+function findGetParameter (parameterName) {
+  let result = null
+  let tmp = []
+  console.log(location.search)
+  location.search.substr(1).split('&').forEach(function (item) {
+    tmp = item.split('=')
+    if (tmp[0] === parameterName) {
+      result = decodeURIComponent(tmp[1])
+    }
+  })
+  return result
 }
 </script>
 

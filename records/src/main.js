@@ -15,53 +15,24 @@ import store from './store'
 Vue.use(VueAxios, axios)
 let BASE_URL = process.env.BASE_URL
 let PROXY_URL = process.env.PROXY_URL
-let USE_PROXY = process.env.USE_PROXY
 
 // Add a request interceptor
 axios.interceptors.request.use(
   function (config) {
-    if (USE_PROXY) {
-      // save real url in headers[url]
-      if (config.headers) {
-        config.headers['url'] = config.url
-      } else {
-        config.headers = {
-          url: config.url
-        }
-      }
-      // substitude url with groovy proxy url
-      config.url = PROXY_URL
-      config.params = {
-        script: 'requestProxy.groovy'
-      }
-
-      // set script name
-      if (config && config.data) {
-        config.data.script = 'requestProxy.groovy'
-      } else {
-        config.data = {
-          script: 'requestProxy.groovy'
-        }
-      }
+    // save real url in headers[url]
+    if (config.headers) {
+      config.headers['url'] = config.url
+      config.headers['user-token'] = localStorage.getItem('user-token')
     } else {
-      // 本机开发，不使用groovy proxy
-      // inject api and user name
       config.headers = {
-        apikey: 'oh-my-tlb'
-      }
-      config.params = {
-        username: 'FKY'
-      }
-
-      if (config && config.data) {
-        config.data.user = 'FKY'
-      } else {
-        config.data = {
-          user: 'FKY'
-        }
+        url: config.url
       }
     }
-
+    // substitude url with proxy url
+    // dirty hack that not substitude user
+    if (!config.url.startsWith('http')) {
+      config.url = PROXY_URL
+    }
     return config
   },
   function (error) {

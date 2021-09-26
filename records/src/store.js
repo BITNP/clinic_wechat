@@ -24,7 +24,8 @@ export default new Vuex.Store({
     campus: [],
     dates: [],
     announcements: [],
-    workingRecord: undefined
+    workingRecord: undefined,
+    loggedin: false
   },
   mutations: {
     popSuccess (state, text = '操作成功') {

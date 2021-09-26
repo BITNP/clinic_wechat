@@ -115,7 +115,7 @@ export default {
     }
   },
   created () {
-    this.$store.commit('initAnnouncements')
+    // this.$store.commit('initAnnouncements')
   }
 }
 </script>
