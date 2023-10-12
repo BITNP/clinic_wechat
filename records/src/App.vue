@@ -49,11 +49,9 @@ export default {
                   localStorage.setItem('user-token', info.code)
                   const response2 = await axios.post(USER_URL)
                   if (response2.data.status !== 200) {
-                    console.log('oops!! login failed ' + response2.data.status)
                     reject(Error('login failed'))
                   } else {
                     resolve()
-                    console.log('!!resolve!!')
                   }
                 }
               })

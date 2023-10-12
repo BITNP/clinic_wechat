@@ -28,9 +28,6 @@
       <div class="container-center"></div>
       <div class="container-right">{{date.startTime}} - {{ date.endTime}}</div>
       <div style="text-align:center;"></div>
-      <!-- <div style="padding:10px 20px;">
-        <x-button plain @click.native="true" style="font-size:10px;" type="primary">预约</x-button>
-      </div>-->
     </div>
   </card>
 </template>

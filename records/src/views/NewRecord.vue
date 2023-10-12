@@ -50,10 +50,12 @@ export default {
         !(
           this.record.campus &&
           this.record.appointment_time &&
-          this.record.description
+          this.record.description &&
+          this.record.realname &&
+          this.record.phone_num
         )
       ) {
-        this.$store.commit('popError', '有选项仍未填完')
+        this.$store.commit('popError', '有必填项仍未填完')
         return
       }
       if (this.agree === false) {

@@ -20,8 +20,8 @@ export default {
   methods: {
     backHome () {
       this.data = true
-      //   alert('bach h')
       this.$router.push('/')
+      this.$store.commit('getWorkingRecord') // reload working record
     }
   },
   computed: {

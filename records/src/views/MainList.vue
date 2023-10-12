@@ -16,35 +16,6 @@
     <div class="page-content">
       <TopAnnouncements></TopAnnouncements>
       <router-view></router-view>
-      <!-- <template v-if="[2,3].includes(tabNum)">
-        <template v-for="(d,index) in filtered_records">
-          <RecordPreview :key="index" :record="d" @edit-current-record="popup([d,index])"></RecordPreview>
-        </template>
-
-        <infinite-loading @infinite="loadMore" spinner="circles">
-          <template slot="no-results">
-            <Footer />
-          </template>
-          <template slot="no-more">
-            <Footer />
-          </template>
-        </infinite-loading>
-
-        <br />
-        <div v-transfer-dom>
-          <popup v-model="display">
-            <Popupcontent v-model="record" :create="false" />
-          </popup>
-        </div>
-      </template>
-      <template v-else-if="tabNum == 0">
-        <Announcements></Announcements>
-        <Footer></Footer>
-      </template>
-      <template v-else>
-        <Calendar />
-        <Footer />
-      </template>-->
       <Footer />
     </div>
 
@@ -69,9 +40,6 @@ import {
   XButton,
   Box
 } from 'vux'
-// import Calendar from '@/components/Calendar'
-// import RecordPreview from '@/components/RecordPreview'
-// import Announcements from '@/components/Announcements'
 import TopAnnouncements from '@/components/TopAnnouncements'
 import Footer from '@/components/Footer'
 
@@ -93,13 +61,7 @@ export default {
       { title: '已处理', to: {name: 'finish'} }
     ],
     tabNum: 0,
-    // display_new_form: false,
-    // scroll: false,
     display: false,
-    // next: '',
-    // touch: {
-    //   x: -1
-    // },
     record: {
       campus: '',
       appointment_time: new Date().toISOString().substr(0, 10)
@@ -112,40 +74,6 @@ export default {
     }
   },
   methods: {
-    // popup (name) {
-    //   this.display = !this.display
-    //   this.record = name[0]
-    //   this.record_index = name[1]
-    // },
-    // loadMore ($state) {
-    //   if ($state && !this.next) {
-    //     $state.complete()
-    //     return
-    //   }
-    //   this.$http
-    //     .get(this.next)
-    //     .then(({ data }) => {
-    //       if (typeof data === 'string') {
-    //         // 如果返回了string，表示服务端可能出现错误
-    //         this.$store.commit('popError', 'Oops! 我们的服务器出现了一些问题')
-    //         return
-    //       }
-    //       this.all_records = this.all_records.concat(data.results)
-    //       this.next = data.next
-    //       if ($state && this.next) {
-    //         $state.loaded()
-    //       } else if ($state) {
-    //         $state.complete()
-    //       }
-    //     })
-    //     .catch(e => {
-    //       console.log(e)
-    //       this.$store.commit('popError', '无法获取数据')
-    //     })
-    // },
-    // initRecords () {
-    //   this.next = this.Const + 'wechat/'
-    // },
     switchTab (index) {
       if (this.tabNum === index) {
         // 当前页面
@@ -160,7 +88,7 @@ export default {
     this.tabNum = this.tabTitles.map(v => v.to.name).indexOf(name)
   },
   mounted () {
-    this.record.campus = '良乡校区'
+    this.record.campus = '良乡校区-图书馆'
   }
 }
 </script>

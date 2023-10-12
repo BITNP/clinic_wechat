@@ -6,14 +6,6 @@
     <template v-for="(date, idx) in datesSelected">
       <DatePreview :date="date" :key="idx"></DatePreview>
     </template>
-    <br />
-    <template v-for="(c, idx) in campus">
-      <flexbox v-if="dates.filter(v=>v.campus===c.name).length===0" :key="idx">
-        <flexbox-item>
-          <div class="flex-demo">{{c.name}}未来没有可预约时间</div>
-        </flexbox-item>
-      </flexbox>
-    </template>
   </div>
 </template>
 
