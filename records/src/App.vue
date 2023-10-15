@@ -62,11 +62,10 @@ export default {
         }
       })
     })()
+    this.$store.commit('initAnnouncements')
     this.$store.commit('getCampus')
     this.$store.commit('getDates')
     this.$store.commit('getWorkingRecord')
-
-    this.$store.commit('initAnnouncements')
   }
 }
 
