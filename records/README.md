@@ -8,11 +8,7 @@
 # install dependencies
 npm install
 
-# 已经废弃，因为没有经过代理脚本，无法通过密码学验证
 npm run dev
-
-# 通过本地 Grails 代理向 本地Django 发送请求的开发环境
-npm run dev-proxy
 
 # build for production with minification
 npm run build
