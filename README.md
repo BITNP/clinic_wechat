@@ -26,7 +26,22 @@ i北理 -> 我的北理 -> IT服务 -> 电脑义诊
 
 与 https://github.com/BITNP/clinic_proxy_dingtalk 一同部署。
 
-运行前端服务，请参考相应[README](./records/README.md)
+> Records management for clinic wechat SPA
+
+## Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+npm run dev
+
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
+```
 
 ## FAQ
 
